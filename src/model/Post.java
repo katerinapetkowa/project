@@ -1,0 +1,71 @@
+package model;
+
+import java.time.LocalDateTime;
+
+public class Post implements Comparable<Post> {
+
+	private int postId;
+	private int userId;
+	private String category; 
+	private String title;
+	private  int points;
+	private LocalDateTime uploadDate;
+	private String picture;
+	
+	
+	public Post(int postId, int userId, String category, String title, int points, LocalDateTime uploadDate, String picture) {
+		this.postId = postId;
+		this.userId = userId;
+		this.category = category;
+		this.title = title;
+		this.uploadDate = uploadDate;
+		this.picture = picture;
+	}
+
+
+	public int getPostId() {
+		return postId;
+	}
+
+
+	public int getUserId() {
+		return userId;
+	}
+
+
+	public String getCategory() {
+		return category;
+	}
+
+
+	public String getTitle() {
+		return title;
+	}
+
+
+	public int getPoints() {
+		return points;
+	}
+
+	public LocalDateTime getUploadDate() {
+		return uploadDate;
+	}
+
+	public String getPicture() {
+		return picture;
+	}
+	
+	public void getUpVote(){
+		this.points += 1;
+	}
+
+	public void getDownVote(){
+		this.points -= 1;
+	}
+
+	@Override
+	public int compareTo(Post p) {
+		return this.uploadDate.compareTo(p.uploadDate);
+	}
+	
+}
