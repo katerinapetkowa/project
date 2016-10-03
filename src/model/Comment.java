@@ -7,7 +7,7 @@ public class Comment {
 	private int commentId;
 	private int userId;
 	private int postId;
-	// ?parrent comment -more like HELL NOOO
+	// ?parrent comment
 	private String text;
 	private int points;
 	private LocalDateTime uploadDate;

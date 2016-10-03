@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,8 +30,6 @@ import model.db.UserDAO;
 @MultipartConfig
 public class UploadPostServlet extends HttpServlet {
 	
-	private static int count = 0;
-	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String html;
 		String logged =(String) request.getSession().getAttribute("loggedAs");
@@ -45,7 +46,9 @@ public class UploadPostServlet extends HttpServlet {
 				dir.mkdir();
 			}
 			
-			File postPicFile = new File(dir, logged + count++ + "-post-pic."+ postPicture.getContentType().split("/")[1]);
+			String date = DateTimeFormatter.ofPattern("MM-dd-yyyy").format(LocalDate.now());
+			String time = DateTimeFormatter.ofPattern("H-mm-ss").format(LocalTime.now());
+			File postPicFile = new File(dir, logged + "-" + date + "-" + time + "-post-pic."+ postPicture.getContentType().split("/")[1]);
 			System.out.println("Try to save file with name: " + postPicFile.getName());
 			System.out.println("abs. path = " + postPicFile.getAbsolutePath());
 			Files.copy(postPicStream, postPicFile.toPath());

@@ -1,5 +1,6 @@
 package model;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,9 +25,9 @@ public class UsersManager {
 		}
 		return instance;
 	}
-	
-	public boolean validUsername(String username){
-		if(registerredUsers.containsKey(username)){
+
+	public boolean validUsername(String username) {
+		if (registerredUsers.containsKey(username)) {
 			return false;
 		}
 		return true;
@@ -59,18 +60,21 @@ public class UsersManager {
 		user.setPassword(password);
 		System.out.println("Password changed successfully in collection");
 	}
-	
+
 	public void changeEmail(String username, String email) {
 		UserDAO.getInstance().changeEmailInDB(username, email);
 		User user = registerredUsers.get(username);
-		user.setEmail(email);;
+		user.setEmail(email);
+		;
 		System.out.println("Email changed successfully in collection");
 	}
-	
+
 	public void changeProfilePicture(String username, String profilePicture) {
-		UserDAO.getInstance().changeProfilePictureInDB(username, profilePicture);;
+		UserDAO.getInstance().changeProfilePictureInDB(username, profilePicture);
+		;
 		User user = registerredUsers.get(username);
-		user.setProfilePicture(profilePicture);;
+		user.setProfilePicture(profilePicture);
+		;
 		System.out.println("Profile picture changed successfully in collection");
 	}
 
@@ -82,4 +86,17 @@ public class UsersManager {
 		return registerredUsers.get(username);
 	}
 
+	public String passwordToMD5(String password) throws UnsupportedEncodingException {
+		try {
+			java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+			byte[] array = md.digest(password.getBytes("UTF-8"));
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < array.length; ++i) {
+				sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1, 3));
+			}
+			return sb.toString();
+		} catch (java.security.NoSuchAlgorithmException e) {
+		}
+		return null;
+	}
 }

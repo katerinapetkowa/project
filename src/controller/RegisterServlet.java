@@ -55,7 +55,8 @@ public class RegisterServlet extends HttpServlet {
 							System.out.println("Try to save file with name: " + profilePicFile.getName());
 							System.out.println("abs. path = " + profilePicFile.getAbsolutePath());
 							Files.copy(profilePicStream, profilePicFile.toPath());
-							UsersManager.getInstance().registerUser(username, name, password2, email, profilePicFile.getName());
+							String encryptedPassword = UsersManager.getInstance().passwordToMD5(password2);
+							UsersManager.getInstance().registerUser(username, name, encryptedPassword, email, profilePicFile.getName());
 							
 						//html = " index.html";
 					//}

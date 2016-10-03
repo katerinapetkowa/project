@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Post implements Comparable<Post> {
 
@@ -11,6 +12,7 @@ public class Post implements Comparable<Post> {
 	private  int points;
 	private LocalDateTime uploadDate;
 	private String picture;
+	private ConcurrentHashMap<Integer,Comment> comments;
 	
 	
 	public Post(int postId, int userId, String category, String title, int points, LocalDateTime uploadDate, String picture) {
@@ -67,5 +69,14 @@ public class Post implements Comparable<Post> {
 	public int compareTo(Post p) {
 		return this.uploadDate.compareTo(p.uploadDate);
 	}
+
+
+	@Override
+	public String toString() {
+		return "Post [postId=" + postId + ", userId=" + userId + ", category=" + category + ", title=" + title
+				+ ", points=" + points + ", uploadDate=" + uploadDate + ", picture=" + picture + "]";
+	}
+	
+	
 	
 }

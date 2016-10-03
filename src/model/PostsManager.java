@@ -96,6 +96,7 @@ public class PostsManager {
 		int userId = UsersManager.getInstance().getUser(username).getUserId();
 		LocalDateTime uploadDate = PostDAO.getInstance().getUploadDate(postId);
 		Post post = new Post(postId, userId, category, title, 0, uploadDate, picture);
+		System.out.println(post.toString());
 		PostsManager.getInstance().allPosts.put(post.getPostId(), post);
 		if (!PostsManager.getInstance().postsByCategories.containsKey(category)) {
 			PostsManager.getInstance().postsByCategories.put(category, new HashMap<Integer, Post>());
@@ -122,6 +123,21 @@ public class PostsManager {
 		String username = PostDAO.getInstance().getUsernameOfPostUser(post.getUserId());
 		UsersManager.getInstance().getUser(username).getDownVoteOfPost(postId);
 		PostDAO.getInstance().changePointsInDB(postId, points);
+	}
+	
+	
+	public Map<Integer, Post> searchPosts(String title){
+		Map<Integer, Post> posts = new HashMap<>();
+		for(Post p : PostsManager.getInstance().getAllPosts().values()){
+			if(p.getTitle().toLowerCase().contains(title.toLowerCase())){
+				posts.put(p.getPostId(), p);
+			}
+		}
+		return posts;
+	}
+	
+	public void deletePost(){
+		//TODO
 	}
 
 }

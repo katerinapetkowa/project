@@ -23,9 +23,10 @@ public class LoginServlet extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username");
-		String password = request.getParameter("password");
+		//String password = request.getParameter("password");
+		String encryptedPassword = UsersManager.getInstance().passwordToMD5(request.getParameter("password"));
 		String htmlFile;
-		if(UsersManager.getInstance().validLogin(username, password)){
+		if(UsersManager.getInstance().validLogin(username, encryptedPassword)){
 			request.getSession().setAttribute("loggedAs", username);
 			htmlFile = "posts.jsp";
 		}else{

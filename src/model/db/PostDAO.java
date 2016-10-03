@@ -142,7 +142,7 @@ public class PostDAO {
 			st.close();
 			System.out.println("Points changed successfully in db");
 		} catch (SQLException e) {
-			System.out.println("Oops .. did not change the name of the user");
+			System.out.println("Oops .. did not change the points of the post");
 			e.printStackTrace();
 		}
 	}
