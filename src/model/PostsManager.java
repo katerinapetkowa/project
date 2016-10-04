@@ -91,10 +91,9 @@ public class PostsManager {
 		return Collections.unmodifiableMap(postsByCategories);
 	}
 
-	public void uploadPost(String username, String category, String title, String picture) {
-		int postId = PostDAO.getInstance().addPostToDB(username, category, title, picture);
+	public void uploadPost(String username, String category, String title, LocalDateTime uploadDate, String picture) {
+		int postId = PostDAO.getInstance().addPostToDB(username, category, title, uploadDate, picture);
 		int userId = UsersManager.getInstance().getUser(username).getUserId();
-		LocalDateTime uploadDate = PostDAO.getInstance().getUploadDate(postId);
 		Post post = new Post(postId, userId, category, title, 0, uploadDate, picture);
 		System.out.println(post.toString());
 		PostsManager.getInstance().allPosts.put(post.getPostId(), post);
@@ -136,8 +135,11 @@ public class PostsManager {
 		return posts;
 	}
 	
-	public void deletePost(){
-		//TODO
+	public void deletePost(int postId){
+		PostsManager.getInstance().allPosts.remove(postId);
+		String postCategory = PostsManager.getInstance().getPost(postId).getCategory();
+		PostsManager.getInstance().postsByCategories.get(postCategory).remove(postId);
+		PostDAO.getInstance().deletePostFromDB(postId);
 	}
 
 }

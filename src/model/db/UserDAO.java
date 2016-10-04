@@ -6,7 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
+import model.Post;
 import model.User;
 
 public class UserDAO {
@@ -29,9 +31,11 @@ public class UserDAO {
 			ResultSet resultSet = st
 					.executeQuery("SELECT user_id, username, name, password, email, profile_picture FROM users;");
 			while (resultSet.next()) {
+				ConcurrentHashMap<Integer, Post> posts = new ConcurrentHashMap<>();
+				posts.putAll(PostDAO.getInstance().getPostsByUserFromDB(resultSet.getInt("user_id")));
 				users.add(new User(resultSet.getInt("user_id"), resultSet.getString("username"),
 						resultSet.getString("name"), resultSet.getString("password"), resultSet.getString("email"),
-						resultSet.getString("profile_picture")));
+						resultSet.getString("profile_picture"), posts));
 			}
 			resultSet.close();
 			st.close();
@@ -120,6 +124,10 @@ public class UserDAO {
 			System.out.println("Oops .. did not change the profile picture of the user");
 			e.printStackTrace();
 		}
+	}
+	
+	public void deleteUserFromDB(String username){
+		//TODO
 	}
 	
 }

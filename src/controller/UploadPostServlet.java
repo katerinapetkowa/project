@@ -52,7 +52,7 @@ public class UploadPostServlet extends HttpServlet {
 			System.out.println("Try to save file with name: " + postPicFile.getName());
 			System.out.println("abs. path = " + postPicFile.getAbsolutePath());
 			Files.copy(postPicStream, postPicFile.toPath());
-			PostsManager.getInstance().uploadPost(logged, category, title, postPicFile.getName());
+			PostsManager.getInstance().uploadPost(logged, category, title, LocalDateTime.now(), postPicFile.getName());
 			html = "posts.jsp";
 		}else{
 			html = "index.html";	

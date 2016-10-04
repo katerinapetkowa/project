@@ -42,7 +42,7 @@ public class UsersManager {
 
 	public void registerUser(String username, String name, String password, String email, String profilePicture) {
 		int userId = UserDAO.getInstance().addUserToDB(username, name, password, email, profilePicture);
-		User user = new User(userId, username, name, password, email, profilePicture);
+		User user = new User(userId, username, name, password, email, profilePicture, new ConcurrentHashMap<Integer, Post>());
 		registerredUsers.put(username, user);
 		System.out.println("User added successfully to collection of all users");
 	}
@@ -71,10 +71,8 @@ public class UsersManager {
 
 	public void changeProfilePicture(String username, String profilePicture) {
 		UserDAO.getInstance().changeProfilePictureInDB(username, profilePicture);
-		;
 		User user = registerredUsers.get(username);
 		user.setProfilePicture(profilePicture);
-		;
 		System.out.println("Profile picture changed successfully in collection");
 	}
 
@@ -86,17 +84,31 @@ public class UsersManager {
 		return registerredUsers.get(username);
 	}
 
-	public String passwordToMD5(String password) throws UnsupportedEncodingException {
+	public String passwordToMD5(String password) {
 		try {
 			java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
-			byte[] array = md.digest(password.getBytes("UTF-8"));
+			byte[] array;
+			array = md.digest(password.getBytes("UTF-8"));
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < array.length; ++i) {
 				sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1, 3));
 			}
 			return sb.toString();
 		} catch (java.security.NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return null;
 	}
+	
+	public void deleteUser(String username){
+		for(int i : UsersManager.getInstance().getUser(username).getPosts().keySet()){
+			PostsManager.getInstance().deletePost(i);
+		}
+		UsersManager.getInstance().registerredUsers.remove(username);
+		UserDAO.getInstance().deleteUserFromDB(username);
+	}
+
 }

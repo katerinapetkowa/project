@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-import model.db.PostDAO;
 
 
 public class User {
@@ -18,7 +17,7 @@ public class User {
 	private String profilePicture;
 	private ConcurrentHashMap<Integer,Post> posts;
 	
-	public User(int userId, String username, String name, String password, String email, String profilePicture) {
+	public User(int userId, String username, String name, String password, String email, String profilePicture, ConcurrentHashMap<Integer, Post> posts) {
 		this.userId = userId;
 		this.username = username;
 		this.name = name;
@@ -26,9 +25,6 @@ public class User {
 		this.email = email;
 		this.profilePicture = profilePicture;
 		this.posts = new ConcurrentHashMap<>();
-		for (Post p : PostDAO.getInstance().getPostsByUserFromDB(userId)) {
-			posts.put(p.getPostId(), p);
-		}
 	}
 	
 	
