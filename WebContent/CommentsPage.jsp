@@ -4,6 +4,8 @@
 <%@ page import="model.Post" %>
 <%@ page import="model.UsersManager" %>
 <%@ page import="model.User" %>
+<%@ page import="model.CommentsManager" %>
+<%@ page import="model.Comment" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -141,7 +143,7 @@
 
                 <!-- Comments Form -->
                 <div class="well">
-                    <h4>Leave a Comment:</h4>
+                    <h4><% %></h4>
                     <form role="form">
                         <div class="form-group">
                             <textarea class="form-control" rows="3"></textarea>
@@ -153,7 +155,7 @@
                 <hr>
 
                 <!-- Posted Comments -->
-
+				<%  for(Comment comment : CommentsManager.getInstance().getCommentsOfPost(post.getPostId()).values()){ %>
                 <!-- Comment -->
                 <div class="media">
                     <a class="pull-left" href="#">
@@ -161,9 +163,10 @@
                     </a>
                     <div class="media-body">
                         <h4 class="media-heading"><%= UsersManager.getInstance().getUser(session.getAttribute("loggedAs").toString()).getUsername()%>
-                            <small>August 25, 2014 at 9:30 PM</small>
+                            <small><%= comment.getUploadDate() %></small>
                         </h4>
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                        <%= comment.getText() %>
+                    <% }  %>
                     </div>
                 </div>
 

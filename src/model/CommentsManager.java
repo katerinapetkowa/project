@@ -36,7 +36,9 @@ public class CommentsManager {
 	
 	public ConcurrentHashMap<Integer,Comment> getCommentsOfPost(int postId){
 		ConcurrentHashMap<Integer,Comment> commentsOfPost = new ConcurrentHashMap<>();
-		commentsOfPost.putAll(CommentsManager.getInstance().getCommentsByPosts().get(postId));
+		if(CommentsManager.getInstance().getCommentsByPosts().containsKey(postId)){
+			commentsOfPost.putAll(CommentsManager.getInstance().getCommentsByPosts().get(postId));
+		}
 		return commentsOfPost;
 	}
 	
