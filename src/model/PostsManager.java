@@ -104,24 +104,26 @@ public class PostsManager {
 		UsersManager.getInstance().getUser(username).addPost(post);
 	}
 
+	//TODO change method
 	public void upVotePost(int postId) {
-		Post post = PostsManager.getInstance().getPost(postId);
-		int points = post.getPoints() + 1;
-		PostsManager.getInstance().allPosts.get(postId).getUpVote();
-		PostsManager.getInstance().postsByCategories.get(post.getCategory()).get(postId).getUpVote();
-		String username = PostDAO.getInstance().getUsernameOfPostUser(post.getUserId());
-		UsersManager.getInstance().getUser(username).getUpVoteOfPost(postId);
-		PostDAO.getInstance().changePointsInDB(postId, points);
+//		Post post = PostsManager.getInstance().getPost(postId);
+//		int points = post.getPoints() + 1;
+//		PostsManager.getInstance().allPosts.get(postId).getUpVote();
+//		PostsManager.getInstance().postsByCategories.get(post.getCategory()).get(postId).getUpVote();
+//		String username = PostDAO.getInstance().getUsernameOfPostUser(post.getUserId());
+//		UsersManager.getInstance().getUser(username).getUpVoteOfPost(postId);
+//		PostDAO.getInstance().changePointsInDB(postId, points);
 	}
 
+	//TODO change method
 	public void downVotePost(int postId) {
-		Post post = PostsManager.getInstance().getPost(postId);
-		int points = post.getPoints() - 1;
-		PostsManager.getInstance().allPosts.get(postId).getDownVote();
-		PostsManager.getInstance().postsByCategories.get(post.getCategory()).get(postId).getDownVote();
-		String username = PostDAO.getInstance().getUsernameOfPostUser(post.getUserId());
-		UsersManager.getInstance().getUser(username).getDownVoteOfPost(postId);
-		PostDAO.getInstance().changePointsInDB(postId, points);
+//		Post post = PostsManager.getInstance().getPost(postId);
+//		int points = post.getPoints() - 1;
+//		PostsManager.getInstance().allPosts.get(postId).getDownVote();
+//		PostsManager.getInstance().postsByCategories.get(post.getCategory()).get(postId).getDownVote();
+//		String username = PostDAO.getInstance().getUsernameOfPostUser(post.getUserId());
+//		UsersManager.getInstance().getUser(username).getDownVoteOfPost(postId);
+//		PostDAO.getInstance().changePointsInDB(postId, points);
 	}
 	
 	
@@ -136,6 +138,9 @@ public class PostsManager {
 	}
 	
 	public void deletePost(int postId){
+		for(Comment c : CommentsManager.getInstance().getCommentsByPosts().get(postId).values()){
+			CommentsManager.getInstance().deleteComment(postId, c.getCommentId());
+		}
 		PostsManager.getInstance().allPosts.remove(postId);
 		String postCategory = PostsManager.getInstance().getPost(postId).getCategory();
 		PostsManager.getInstance().postsByCategories.get(postCategory).remove(postId);

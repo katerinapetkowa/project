@@ -127,7 +127,17 @@ public class UserDAO {
 	}
 	
 	public void deleteUserFromDB(String username){
-		//TODO
+		try {
+			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(
+					"DELETE FROM users  WHERE username = ? ;");
+			st.setString(1, username);
+			st.executeUpdate();
+			st.close();
+			System.out.println("User deleted successfully from db");
+		} catch (SQLException e) {
+			System.out.println("Oops .. did not delete the user from db");
+			e.printStackTrace();
+		}
 	}
 	
 }

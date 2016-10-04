@@ -81,7 +81,6 @@ public class CommentDAO {
 	
 	
 	public int addCommentToDB(String username, int postId, String text, int points, LocalDateTime uploadDate){
-		//TODO
 		int userId = UsersManager.getInstance().getUser(username).getUserId();
 		int commentId = 0;
 		try {
@@ -107,8 +106,24 @@ public class CommentDAO {
 		}
 		return commentId;
 	}
+
+
+	public void deleteCommentFromDB(int commentId) {
+		try {
+			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(
+					"DELETE FROM comments  WHERE comment_id = ? ;");
+			st.setInt(1, commentId);
+			st.executeUpdate();
+			st.close();
+			System.out.println("Comment deleted successfully from db");
+		} catch (SQLException e) {
+			System.out.println("Oops .. did not delete the comment from db");
+			e.printStackTrace();
+		}
+		
+	}
 	
-	//TODO add comment, delete comment 
+	//TODO  delete comment 
 	
 	
 }

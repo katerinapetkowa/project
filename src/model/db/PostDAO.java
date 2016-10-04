@@ -124,24 +124,24 @@ public class PostDAO {
 	}
 	
 	public void changePointsInDB(int postId, int points){
-		try {
-			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(
-					"UPDATE posts SET points = ? WHERE post_id = "
-							+ postId + ";");
-			st.setInt(1, points);
-			st.executeUpdate();
-			st.close();
-			System.out.println("Points changed successfully in db");
-		} catch (SQLException e) {
-			System.out.println("Oops .. did not change the points of the post");
-			e.printStackTrace();
-		}
+//		try {
+//			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(
+//					"UPDATE posts SET points = ? WHERE post_id = "
+//							+ postId + ";");
+//			st.setInt(1, points);
+//			st.executeUpdate();
+//			st.close();
+//			System.out.println("Points changed successfully in db");
+//		} catch (SQLException e) {
+//			System.out.println("Oops .. did not change the points of the post");
+//			e.printStackTrace();
+//		}
 	}
 	
 	public void deletePostFromDB(int postId){
 		try {
 			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(
-					"DELETE(*) FROM posts  WHERE post_id = ? ;");
+					"DELETE FROM posts  WHERE post_id = ? ;");
 			st.setInt(1, postId);
 			st.executeUpdate();
 			st.close();
