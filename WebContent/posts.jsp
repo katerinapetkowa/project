@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ page import="model.PostsManager" %>
 <%@ page import="model.Post" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -122,12 +124,12 @@
 				<% for(Post post : PostsManager.getInstance().getFreshPosts().values()){  %>
                 <!-- First Blog Post -->
                 <h2>
-                    <a href="#"><%= post.getTitle() %></a>
+                    <a href="DetailsPostServlet?post_id=<%= post.getPostId()%>"> <%= post.getTitle() %></a>
                 </h2>
                
                 <p><span class="glyphicon glyphicon-time"></span> <%= post.getUploadDate() %></p>
                 <hr>
-                <img class="img-responsive" src="PostServlet?post_id=<%= post.getPostId()%>" alt="" width = "500">
+                <a href="DetailsPostServlet?post_id=<%= post.getPostId()%>"> <img class="img-responsive" src="PostServlet?post_id=<%= post.getPostId()%>" alt="" width = "500"></a>
                 <hr>
                
 				<% }  %>
