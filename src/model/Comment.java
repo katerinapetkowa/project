@@ -45,4 +45,12 @@ public class Comment {
 		return uploadDate;
 	}
 
+	@Override
+	public String toString() {
+		return "Comment [commentId=" + commentId + ", userId=" + userId + ", postId=" + postId + ", text=" + text
+				+ ", points=" + points + ", uploadDate=" + uploadDate + "]";
+	}
+	
+	
+
 }

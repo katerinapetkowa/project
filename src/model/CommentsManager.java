@@ -41,8 +41,16 @@ public class CommentsManager {
 	}
 	
 	
-	public void uploadComment(int commentId, int userId, int postId, String text, int points, LocalDateTime uploadDate){
+	public void uploadComment(String username, int postId, String text, int points, LocalDateTime uploadDate){
 		//TODO
+		int commentId = CommentDAO.getInstance().addCommentToDB(username, postId, text, points, uploadDate);
+		int userId = UsersManager.getInstance().getUser(username).getUserId();
+		Comment comment = new Comment(commentId, userId, postId, text, points, uploadDate);
+		System.out.println(comment.toString());
+		if(!CommentsManager.getInstance().commentsByPosts.contains(postId)){
+			CommentsManager.getInstance().commentsByPosts.put(postId, new HashMap<Integer, Comment>());
+		}
+		CommentsManager.getInstance().commentsByPosts.get(postId).put(commentId, comment);
 	}
 	
 }

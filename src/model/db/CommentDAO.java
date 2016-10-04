@@ -1,12 +1,16 @@
 package model.db;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 import model.Comment;
+import model.UsersManager;
 
 
 public class CommentDAO {
@@ -76,8 +80,32 @@ public class CommentDAO {
 //	}
 	
 	
-	public void addCommentToDB(){
+	public int addCommentToDB(String username, int postId, String text, int points, LocalDateTime uploadDate){
 		//TODO
+		int userId = UsersManager.getInstance().getUser(username).getUserId();
+		int commentId = 0;
+		try {
+			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(
+					"INSERT INTO comments (user_id, post_id, text, points, upload_date) VALUES (?, ?, ?, ?, ?);",
+					Statement.RETURN_GENERATED_KEYS);
+			st.setInt(1, userId);
+			st.setInt(2, postId);
+			st.setString(3, text);
+			st.setInt(4, 0);
+			st.setTimestamp(5, Timestamp.valueOf(uploadDate));
+			st.executeUpdate();
+			ResultSet rs = st.getGeneratedKeys();
+			if (rs.next()) {
+				commentId = rs.getInt(1);
+			}
+			rs.close();
+			st.close();
+			System.out.println("Post added successfully to db");
+		} catch (SQLException e) {
+			System.out.println("Oops .. did not save the post in db");
+			e.printStackTrace();
+		}
+		return commentId;
 	}
 	
 	//TODO add comment, delete comment 
