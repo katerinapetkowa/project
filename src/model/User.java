@@ -1,30 +1,38 @@
 package model;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 
 
 public class User {
-
-	private int userId;
+	
 	private String username;
 	private String name;
 	private String password;
 	private String email;
 	private String profilePicture;
-	private ConcurrentHashMap<Integer,Post> posts;
+	private ConcurrentHashMap<Integer,Post> posts; //post id -> post
+	//collections of liked/commented posts ??
+	//collection of comments of other user's posts
 	
-	public User(int userId, String username, String name, String password, String email, String profilePicture, ConcurrentHashMap<Integer, Post> posts) {
-		this.userId = userId;
+	//private ConcurrentHashMap<Integer,Post> likedPosts;
+	//private ConcurrentHashMap<Integer,Post> commentedPosts;
+	private ConcurrentHashMap<Integer, Set<Integer>> comments;
+	
+	
+	public User(String username, String name, String password, String email, String profilePicture, ConcurrentHashMap<Integer, Post> posts) {
 		this.username = username;
 		this.name = name;
 		this.password = password;
 		this.email = email;
 		this.profilePicture = profilePicture;
 		this.posts = new ConcurrentHashMap<>();
+		this.posts.putAll(posts);
 	}
 	
 	
@@ -46,10 +54,6 @@ public class User {
 	
 	public void addPost(Post post){
 		this.posts.put(post.getPostId(), post);
-	}
-	
-	public int getUserId() {
-		return userId;
 	}
 	
 	public String getUsername() {
@@ -90,6 +94,21 @@ public class User {
 	
 	public Map<Integer, Post> getPosts() {
 		return Collections.unmodifiableMap(posts);
+	}
+	
+	public Map<Integer, Set<Integer>> getComments() {
+		return Collections.unmodifiableMap(comments);
+	}
+	
+	public void addCommentToUser(int postId, int commentId){
+		if(!this.comments.containsKey(postId)){
+			this.comments.put(postId, new HashSet<Integer>());
+		}
+		this.comments.get(postId).add(commentId);
+	}
+	
+	public void deleteCommentFromUser(int postId, int commentId){
+		this.comments.get(postId).remove(commentId);
 	}
 	
 	public void getUpVoteOfPost(int postId){

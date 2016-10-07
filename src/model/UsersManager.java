@@ -41,8 +41,8 @@ public class UsersManager {
 	}
 
 	public void registerUser(String username, String name, String password, String email, String profilePicture) {
-		int userId = UserDAO.getInstance().addUserToDB(username, name, password, email, profilePicture);
-		User user = new User(userId, username, name, password, email, profilePicture, new ConcurrentHashMap<Integer, Post>());
+		UserDAO.getInstance().addUserToDB(username, name, password, email, profilePicture);
+		User user = new User(username, name, password, email, profilePicture, new ConcurrentHashMap<Integer, Post>());
 		registerredUsers.put(username, user);
 		System.out.println("User added successfully to collection of all users");
 	}
@@ -104,9 +104,7 @@ public class UsersManager {
 	}
 	
 	public void deleteUser(String username){
-		for(int i : UsersManager.getInstance().getUser(username).getPosts().keySet()){
-			PostsManager.getInstance().deletePost(i);
-		}
+		//TODO delete comments of user from collections?
 		UsersManager.getInstance().registerredUsers.remove(username);
 		UserDAO.getInstance().deleteUserFromDB(username);
 	}
