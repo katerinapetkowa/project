@@ -14,12 +14,14 @@ public class PostsManager {
 	private static PostsManager instance;
 	private ConcurrentHashMap<Integer, Post> allPosts;
 	private ConcurrentHashMap<String, HashMap<Integer, Post>> postsByCategories;
+	//nqkuv set ot users koito sa haresali i ne?? ili vseki post da si gi pazi
+	
 
 	private PostsManager() {
 		allPosts = new ConcurrentHashMap<>();
 		for (Post p : PostDAO.getInstance().getAllPostsFromDB()) {
 			allPosts.put(p.getPostId(), p);
-			System.out.println(p.getPostId() + "," + p.getUserId() + "," + p.getCategory() + "," + p.getTitle() + ","
+			System.out.println(p.getPostId() + "," + p.getUsername() + "," + p.getCategory() + "," + p.getTitle() + ","
 					+ p.getPoints() + "," + p.getUploadDate() + "," + p.getPicture());
 		}
 		System.out.println("Posts loaded successfully in collection");
@@ -29,7 +31,7 @@ public class PostsManager {
 			if (!postsByCategories.containsKey(p.getCategory())) {
 				postsByCategories.put(p.getCategory(), new HashMap<Integer, Post>());
 			}
-			postsByCategories.get(p.getCategory()).put(p.getPostId(), new Post(p.getPostId(), p.getUserId(),
+			postsByCategories.get(p.getCategory()).put(p.getPostId(), new Post(p.getPostId(), p.getUsername(),
 					p.getCategory(), p.getTitle(), p.getPoints(), p.getUploadDate(), p.getPicture()));
 
 		}
@@ -50,9 +52,6 @@ public class PostsManager {
 
 	public Map<Integer, Post> getFreshPosts() {
 		Map<Integer, Post> freshPosts = new TreeMap<>(Collections.reverseOrder());
-		// for(Post p : PostsManager.getInstance().getAllPosts().values()){
-		// freshPosts.put(p.getPostId(), p);
-		// }
 		freshPosts.putAll(PostsManager.getInstance().getAllPosts());
 		return freshPosts;
 	}
@@ -93,8 +92,7 @@ public class PostsManager {
 
 	public void uploadPost(String username, String category, String title, LocalDateTime uploadDate, String picture) {
 		int postId = PostDAO.getInstance().addPostToDB(username, category, title, uploadDate, picture);
-		int userId = UsersManager.getInstance().getUser(username).getUserId();
-		Post post = new Post(postId, userId, category, title, 0, uploadDate, picture);
+		Post post = new Post(postId, username, category, title, 0, uploadDate, picture);
 		System.out.println(post.toString());
 		PostsManager.getInstance().allPosts.put(post.getPostId(), post);
 		if (!PostsManager.getInstance().postsByCategories.containsKey(category)) {
@@ -104,26 +102,13 @@ public class PostsManager {
 		UsersManager.getInstance().getUser(username).addPost(post);
 	}
 
-	//TODO change method
-	public void upVotePost(int postId) {
-//		Post post = PostsManager.getInstance().getPost(postId);
-//		int points = post.getPoints() + 1;
-//		PostsManager.getInstance().allPosts.get(postId).getUpVote();
-//		PostsManager.getInstance().postsByCategories.get(post.getCategory()).get(postId).getUpVote();
-//		String username = PostDAO.getInstance().getUsernameOfPostUser(post.getUserId());
-//		UsersManager.getInstance().getUser(username).getUpVoteOfPost(postId);
-//		PostDAO.getInstance().changePointsInDB(postId, points);
+	//TODO change points in collections in db, add to table of likes, add to collection of likes
+	public void upVotePost(int userId, int postId) {
+		
 	}
 
 	//TODO change method
-	public void downVotePost(int postId) {
-//		Post post = PostsManager.getInstance().getPost(postId);
-//		int points = post.getPoints() - 1;
-//		PostsManager.getInstance().allPosts.get(postId).getDownVote();
-//		PostsManager.getInstance().postsByCategories.get(post.getCategory()).get(postId).getDownVote();
-//		String username = PostDAO.getInstance().getUsernameOfPostUser(post.getUserId());
-//		UsersManager.getInstance().getUser(username).getDownVoteOfPost(postId);
-//		PostDAO.getInstance().changePointsInDB(postId, points);
+	public void downVotePost(int userId, int postId) {
 	}
 	
 	
@@ -138,13 +123,15 @@ public class PostsManager {
 	}
 	
 	public void deletePost(int postId){
-		for(Comment c : CommentsManager.getInstance().getCommentsByPosts().get(postId).values()){
-			CommentsManager.getInstance().deleteComment(postId, c.getCommentId());
-		}
 		PostsManager.getInstance().allPosts.remove(postId);
 		String postCategory = PostsManager.getInstance().getPost(postId).getCategory();
 		PostsManager.getInstance().postsByCategories.get(postCategory).remove(postId);
 		PostDAO.getInstance().deletePostFromDB(postId);
+		for(Comment c : CommentsManager.getInstance().getCommentsOfPost(postId).values()){
+			UsersManager.getInstance().getUser(c.getUsername()).deleteCommentFromUser(postId, c.getCommentId());
+			//TODO delete comments from every user's personal collection 
+		}
+		CommentsManager.getInstance().deleteAllCommentsOfPost(postId);
 	}
 
 }

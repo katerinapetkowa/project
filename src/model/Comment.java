@@ -5,16 +5,16 @@ import java.time.LocalDateTime;
 public class Comment {
 
 	private int commentId;
-	private int userId;
+	private String username;
 	private int postId;
 	// ?parrent comment
 	private String text;
 	private int points;
 	private LocalDateTime uploadDate;
 
-	public Comment(int commentId, int userId, int postId, String text, int points, LocalDateTime uploadDate) {
+	public Comment(int commentId, String username, int postId, String text, int points, LocalDateTime uploadDate) {
 		this.commentId = commentId;
-		this.userId = userId;
+		this.username = username;
 		this.postId = postId;
 		this.text = text;
 		this.points = points;
@@ -25,8 +25,8 @@ public class Comment {
 		return commentId;
 	}
 
-	public int getUserId() {
-		return userId;
+	public String getUsername() {
+		return username;
 	}
 
 	public int getPostId() {
@@ -47,10 +47,8 @@ public class Comment {
 
 	@Override
 	public String toString() {
-		return "Comment [commentId=" + commentId + ", userId=" + userId + ", postId=" + postId + ", text=" + text
+		return "Comment [commentId=" + commentId + ", username=" + username + ", postId=" + postId + ", text=" + text
 				+ ", points=" + points + ", uploadDate=" + uploadDate + "]";
 	}
-	
-	
 
 }

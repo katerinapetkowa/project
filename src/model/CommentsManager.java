@@ -11,7 +11,8 @@ import model.db.CommentDAO;
 public class CommentsManager {
 	
 	private static CommentsManager instance;
-	private ConcurrentHashMap<Integer, HashMap<Integer, Comment>> commentsByPosts;
+	private ConcurrentHashMap<Integer, HashMap<Integer, Comment>> commentsByPosts; //post id -> comment id -> comment 
+	//nqkuv set ot users koito sa haresali i ne ?? ili vseki comment da si gi pazi
 	
 	public CommentsManager() {
 		commentsByPosts = new ConcurrentHashMap<>();
@@ -42,21 +43,31 @@ public class CommentsManager {
 		return commentsOfPost;
 	}
 	
+	public Comment getComment(int postId, int commentId){
+		return commentsByPosts.get(postId).get(commentId);
+	}
 	
 	public void uploadComment(String username, int postId, String text, int points, LocalDateTime uploadDate){
 		int commentId = CommentDAO.getInstance().addCommentToDB(username, postId, text, points, uploadDate);
-		int userId = UsersManager.getInstance().getUser(username).getUserId();
-		Comment comment = new Comment(commentId, userId, postId, text, points, uploadDate);
+		Comment comment = new Comment(commentId, username, postId, text, points, uploadDate);
 		System.out.println(comment.toString());
 		if(!CommentsManager.getInstance().commentsByPosts.contains(postId)){
 			CommentsManager.getInstance().commentsByPosts.put(postId, new HashMap<Integer, Comment>());
 		}
 		CommentsManager.getInstance().commentsByPosts.get(postId).put(commentId, comment);
+		UsersManager.getInstance().getUser(username).addCommentToUser(postId, commentId);
 	}
 	
-	public void deleteComment(int postId, int commentId){
+	public void deleteComment(String username, int postId, int commentId){
+		UsersManager.getInstance().getUser(username).deleteCommentFromUser(postId, commentId);
 		CommentsManager.getInstance().commentsByPosts.get(postId).remove(commentId);
+		UsersManager.getInstance().getUser(username).deleteCommentFromUser(postId, commentId);
 		CommentDAO.getInstance().deleteCommentFromDB(commentId);
+	}
+	
+	public void deleteAllCommentsOfPost(int postId){
+		
+		CommentsManager.getInstance().commentsByPosts.remove(postId);
 	}
 	
 }

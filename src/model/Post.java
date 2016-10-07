@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class Post implements Comparable<Post> {
 
 	private int postId;
-	private int userId;
+	private String username;
 	private String category; 
 	private String title;
 	private  int points;
@@ -13,9 +13,9 @@ public class Post implements Comparable<Post> {
 	private String picture;
 	
 	
-	public Post(int postId, int userId, String category, String title, int points, LocalDateTime uploadDate, String picture) {
+	public Post(int postId, String username, String category, String title, int points, LocalDateTime uploadDate, String picture) {
 		this.postId = postId;
-		this.userId = userId;
+		this.username = username;
 		this.category = category;
 		this.title = title;
 		this.points = points;
@@ -29,8 +29,8 @@ public class Post implements Comparable<Post> {
 	}
 
 
-	public int getUserId() {
-		return userId;
+	public String getUsername() {
+		return username;
 	}
 
 
@@ -72,10 +72,9 @@ public class Post implements Comparable<Post> {
 
 	@Override
 	public String toString() {
-		return "Post [postId=" + postId + ", userId=" + userId + ", category=" + category + ", title=" + title
+		return "Post [postId=" + postId + ", username=" + username + ", category=" + category + ", title=" + title
 				+ ", points=" + points + ", uploadDate=" + uploadDate + ", picture=" + picture + "]";
 	}
-	
-	
-	
+
+
 }
