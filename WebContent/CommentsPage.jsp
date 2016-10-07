@@ -28,6 +28,7 @@
     <link href="button.css" rel="stylesheet">
     <link href="dropdown.css" rel="stylesheet">
     <link href="LogOutButton.css" rel="stylesheet">
+    <link href="postDetails.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -35,6 +36,53 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    
+ 
+
+<script>
+function byId(e){return document.getElementById(e);}
+
+window.addEventListener('load', mInit, false);
+
+function mInit()
+{
+    var tgt = byId('image');
+    tgt.secondSource = 'redheart2.png';
+}
+
+function byId(e){return document.getElementById(e);}
+
+function action() 
+{
+    var tgt = byId('image');
+    var tmp = tgt.src;
+    tgt.src = tgt.secondSource;
+    tgt.secondSource = tmp;
+};
+</script>
+
+<script>
+function byId(e){return document.getElementById(e);}
+
+window.addEventListener('load', mInit, false);
+
+function mInit()
+{
+    var tgt = byId('image2');
+    tgt.secondSource = 'reddislike2.png';
+}
+
+function byId(e){return document.getElementById(e);}
+
+function action2() 
+{
+    var tgt = byId('image2');
+    var tmp = tgt.src;
+    tgt.src = tgt.secondSource;
+    tgt.secondSource = tmp;
+};
+
+</script>
 
 </head>
 
@@ -137,24 +185,29 @@
                 <!-- Preview Image -->
                 <img class="img-responsive" src="PostServlet?post_id=<%= post.getPostId()%>" alt="" width = "500">
 
+
 				<hr>
-				
+				<input  type="image" id ="image" src="heart.png" onclick="action();" alt="Submit" width="38" height="38"> <input type="image" id = "image2" src="dislikebutton.png" onclick="action2();" alt="Submit" width="38" height="38">
                 <!-- Blog Comments -->
 
                 <!-- Comments Form -->
                 <div class="well">
-                    <h4><% %></h4>
+                    <h4>Leave a comment</h4>
                     <form role="form">
+                    <form action = "WriteCommentServlet" method = "get">
                         <div class="form-group">
-                            <textarea class="form-control" rows="3"></textarea>
+                            <textarea class="form-control" name = "comment" rows="3"> </textarea>
                         </div>
+                        <input id="author" name="post_id" type="hidden" value="<%=post.getPostId() %>" size="30">
+                        <input id="username" name="username" type="hidden" value="<%=session.getAttribute("loggedAs").toString() %>" size="30">
                         <button type="submit" class="btn btn-primary">Submit</button>
+                       </form>
                     </form>
                 </div>
 
                 <hr>
 
-                <!-- Posted Comments -->
+               <!-- Posted Comments -->
 				<%  for(Comment comment : CommentsManager.getInstance().getCommentsOfPost(post.getPostId()).values()){ %>
                 <!-- Comment -->
                 <div class="media">
@@ -170,92 +223,13 @@
                     </div>
                 </div>
 
-                <!-- Comment -->
-                <div class="media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" src="http://placehold.it/64x64" alt="">
-                    </a>
-                    <div class="media-body">
-                        <h4 class="media-heading">Start Bootstrap
-                            <small>August 25, 2014 at 9:30 PM</small>
-                        </h4>
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                        <!-- Nested Comment -->
-                        <div class="media">
-                            <a class="pull-left" href="#">
-                                <img class="media-object" src="http://placehold.it/64x64" alt="">
-                            </a>
-                            <div class="media-body">
-                                <h4 class="media-heading">Nested Start Bootstrap
-                                    <small>August 25, 2014 at 9:30 PM</small>
-                                </h4>
-                                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                            </div>
-                        </div>
-                        <!-- End Nested Comment -->
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Blog Sidebar Widgets Column -->
-            <div class="col-md-4">
-
-                <!-- Blog Search Well -->
-                <div class="well">
-                    <h4>Blog Search</h4>
-                    <div class="input-group">
-                        <input type="text" class="form-control">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">
-                                <span class="glyphicon glyphicon-search"></span>
-                        </button>
-                        </span>
-                    </div>
-                    <!-- /.input-group -->
-                </div>
-
-                <!-- Blog Categories Well -->
-                <div class="well">
-                    <h4>Blog Categories</h4>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <ul class="list-unstyled">
-                                <li><a href="#">Category Name</a>
-                                </li>
-                                <li><a href="#">Category Name</a>
-                                </li>
-                                <li><a href="#">Category Name</a>
-                                </li>
-                                <li><a href="#">Category Name</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-lg-6">
-                            <ul class="list-unstyled">
-                                <li><a href="#">Category Name</a>
-                                </li>
-                                <li><a href="#">Category Name</a>
-                                </li>
-                                <li><a href="#">Category Name</a>
-                                </li>
-                                <li><a href="#">Category Name</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- /.row -->
-                </div>
+                
 
               
 
-            </div>
-
-        </div>
-        <!-- /.row -->
+          
 
      
-
             
 
     </div>

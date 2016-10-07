@@ -1,0 +1,130 @@
+.likebtn-im {
+    display: inline;
+    position: relative;
+    text-decoration: none !important;
+}
+.likebtn-im:hover:after {
+    background: #333;
+    background: rgba(0,0,0,.8);
+    border-radius: 5px;
+    bottom: 26px;
+    color: #fff;
+    content: attr(title);
+    left: 0;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 98;
+    width: 220px;
+    min-width: 40px;
+    font-size: 12px;
+}
+.likebtn-im:hover:before {
+    border: solid;
+    border-color: #333 transparent;
+    border-width: 6px 6px 0 6px;
+    bottom: 20px;
+    content: "";
+    left: 16px;
+    position: absolute;
+    z-index: 99;
+}
+
+.likebtn-wrapper * {
+    background-attachment: scroll;
+    font-family: "Helvetica Neue",Arial,sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    text-decoration: none;
+    text-transform: none;
+    direction: ltr;
+    text-indent: 0;
+    text-shadow: none;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    /*line-height: 16px;*/
+}
+.likebtn-wrapper {
+    cursor: default;
+    line-height: 16px;
+    display: inline-block;
+    white-space: nowrap;
+    direction: ltr;
+    text-indent: 0;
+    position: relative;
+}
+.likebtn-button {
+    line-height: inherit;
+}
+/* AddThis */
+/* To prevent scrolling in Chrome when LikeBtn is embedded */
+#_atssh {
+    display: none;
+}
+/* Reset styles */
+.likebtn-wrapper .lb-tt-m a {
+    border: 0 !important;
+}
+
+/* heartcross */
+.lb-style-heartcross{
+	
+}
+.lb-style-heartcross .lb-count {
+    height: 24px;
+}
+.likebtn-wrapper.lb-style-heartcross {
+    line-height: 24px;
+}
+.lb-style-heartcross .lb-like-icon,
+.lb-style-heartcross .lb-dislike-icon {
+    height: 24px;
+    width: 24px;
+}
+.lb-style-heartcross .lb-like,
+.lb-style-heartcross .lb-dislike {
+    background-color: transparent;
+    color: #555555;
+    height: 26px;
+}
+.lb-style-heartcross .lb-like-label,
+.lb-style-heartcross .lb-dislike-label {
+    color: #555555;
+}
+.lb-style-heartcross .lb-a:hover .lb-like-label,
+.lb-style-heartcross .lb-a:hover .lb-dislike-label,
+.lb-style-heartcross .lb-voted .lb-like-label,
+.lb-style-heartcross .lb-voted .lb-dislike-label,
+.lb-style-heartcross .lb-voted .lb-a:hover .lb-like-label,
+.lb-style-heartcross .lb-voted .lb-a:hover .lb-dislike-label {
+    color: black;
+}
+.lb-style-heartcross .lb-like-icon {
+    background-image: url("heart.png");
+    }
+.lb-style-heartcross .lb-a:hover .lb-like-icon {
+    background-image: url("redheart.png");
+    }
+.lb-style-heartcross .lb-voted .lb-like-icon,
+.lb-style-heartcross .lb-voted .lb-a:hover .lb-like-icon {
+    background-image: url("redheart2.png");
+    }
+.lb-style-heartcross .lb-dislike-icon {
+    background-image: url("dislikebutton.png");
+    }
+.lb-style-heartcross .lb-a:hover .lb-dislike-icon {
+    background-image: url("reddislike.png");
+    }
+.lb-style-heartcross .lb-voted .lb-dislike-icon,
+.lb-style-heartcross .lb-voted .lb-a:hover .lb-dislike-icon {
+    background-image: url("reddislike2.png");
+    }
+.lb-style-heartcross .lb-count {
+    border-left: 0;
+    padding: 0;
+}
+.lb-style-heartcross.lb-counter-type-single-number .lb-count {
+    line-height: 29px;
+}
