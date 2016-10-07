@@ -102,13 +102,22 @@ public class PostsManager {
 		UsersManager.getInstance().getUser(username).addPost(post);
 	}
 
-	//TODO change points in collections in db, add to table of likes, add to collection of likes
-	public void upVotePost(int userId, int postId) {
-		
+	//TODO change points in collections, in db, add to table of likes, add to collection of likes
+	public void upVotePost(String username, int postId) {
+		PostsManager.getInstance().allPosts.get(postId).getUpVote();
+		String category = PostsManager.getInstance().getPost(postId).getCategory();
+		PostsManager.getInstance().postsByCategories.get(category).get(postId).getUpVote();
+		UsersManager.getInstance().getUser(username).getUpVoteOfPost(postId);
+		PostDAO.getInstance().upvotePostInDB(username, postId);
 	}
 
 	//TODO change method
-	public void downVotePost(int userId, int postId) {
+	public void downVotePost(String username, int postId) {
+		PostsManager.getInstance().allPosts.get(postId).getDownVote();
+		String category = PostsManager.getInstance().getPost(postId).getCategory();
+		PostsManager.getInstance().postsByCategories.get(category).get(postId).getDownVote();
+		UsersManager.getInstance().getUser(username).getDownVoteOfPost(postId);
+		PostDAO.getInstance().downvotePostInDB(username, postId);
 	}
 	
 	

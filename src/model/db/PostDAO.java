@@ -99,35 +99,103 @@ public class PostDAO {
 		return postId;
 	}
 
-//	public String getUsernameOfPostUser(int userId) {
-//		String username = "";
-//		try {
-//			Statement st = DBManager.getInstance().getConnection().createStatement();
-//			ResultSet resultSet = st.executeQuery("SELECT username FROM users WHERE user_id =" + userId + ";");
-//			username = resultSet.getString("username");
-//			resultSet.close();
-//			st.close();
-//		} catch (SQLException e) {
-//			System.out.println("Oops, did not get the username.");
-//			return username;
-//		}
-//		return username;
-//	}
-
-	public void changePointsInDB(int postId, int points) {
-		// try {
-		// PreparedStatement st =
-		// DBManager.getInstance().getConnection().prepareStatement(
-		// "UPDATE posts SET points = ? WHERE post_id = "
-		// + postId + ";");
-		// st.setInt(1, points);
-		// st.executeUpdate();
-		// st.close();
-		// System.out.println("Points changed successfully in db");
-		// } catch (SQLException e) {
-		// System.out.println("Oops .. did not change the points of the post");
-		// e.printStackTrace();
-		// }
+	
+	public void upvotePostInDB(String username, int postId){
+		//TODO transaction that changes post's points in posts and adds the upvote in post_upvotes
+		PreparedStatement selectPoints = null;
+		PreparedStatement changePoints = null;
+		PreparedStatement addUpvote = null;
+		try {
+			DBManager.getInstance().getConnection().setAutoCommit(false);
+			selectPoints = DBManager.getInstance().getConnection()
+					.prepareStatement("SELECT points FROM posts  WHERE post_id = ? ;");
+			selectPoints.setInt(1, postId);
+			int points = selectPoints.executeUpdate();
+			changePoints = DBManager.getInstance().getConnection()
+					.prepareStatement("UPDATE posts SET points = ?  WHERE post_id = ? ;");
+			changePoints.setInt(1, points + 1);
+			changePoints.setInt(2, postId);
+			changePoints.executeUpdate();
+			addUpvote = DBManager.getInstance().getConnection()
+					.prepareStatement("INSERT INTO post_upvotes (post_id, username) VALUES (?, ?) ;");
+			addUpvote.setInt(1, postId);
+			addUpvote.setString(2, username);
+			DBManager.getInstance().getConnection().commit();
+			System.out.println("Post deleted successfully from db");
+		} catch (SQLException e) {
+			try {
+				System.err.print("Transaction is being rolled back, could not delete post");
+				DBManager.getInstance().getConnection().rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			System.out.println("Oops .. did not delete the post from db");
+			e.printStackTrace();
+		} finally {
+			try {
+				if (selectPoints != null) {
+					selectPoints.close();
+				}
+				if (changePoints != null) {
+					changePoints.close();
+				}
+				if (addUpvote != null) {
+					addUpvote.close();
+				}
+				DBManager.getInstance().getConnection().setAutoCommit(false);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void downvotePostInDB(String username, int postId){
+		//TODO transaction that changes post's points in posts and adds the upvote in post_upvotes
+		PreparedStatement selectPoints = null;
+		PreparedStatement changePoints = null;
+		PreparedStatement addDownvote = null;
+		try {
+			DBManager.getInstance().getConnection().setAutoCommit(false);
+			selectPoints = DBManager.getInstance().getConnection()
+					.prepareStatement("SELECT points FROM posts  WHERE post_id = ? ;");
+			selectPoints.setInt(1, postId);
+			int points = selectPoints.executeUpdate();
+			changePoints = DBManager.getInstance().getConnection()
+					.prepareStatement("UPDATE posts SET points = ?  WHERE post_id = ? ;");
+			changePoints.setInt(1, points - 1);
+			changePoints.setInt(2, postId);
+			changePoints.executeUpdate();
+			addDownvote = DBManager.getInstance().getConnection()
+					.prepareStatement("INSERT INTO post_downvotes (post_id, username) VALUES (?, ?) ;");
+			addDownvote.setInt(1, postId);
+			addDownvote.setString(2, username);
+			DBManager.getInstance().getConnection().commit();
+			System.out.println("Post deleted successfully from db");
+		} catch (SQLException e) {
+			try {
+				System.err.print("Transaction is being rolled back, could not delete post");
+				DBManager.getInstance().getConnection().rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			System.out.println("Oops .. did not delete the post from db");
+			e.printStackTrace();
+		} finally {
+			try {
+				if (selectPoints != null) {
+					selectPoints.close();
+				}
+				if (changePoints != null) {
+					changePoints.close();
+				}
+				if (addDownvote != null) {
+					addDownvote.close();
+				}
+				DBManager.getInstance().getConnection().setAutoCommit(false);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void deletePostFromDB(int postId) {
