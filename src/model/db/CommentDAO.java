@@ -106,6 +106,10 @@ public class CommentDAO {
 		}
 		return commentId;
 	}
+	
+	public void getCommentsOfUserFromDB(String username){
+		//TODO get all comments of user of other user's posts
+	}
 
 	public void deleteCommentFromDB(int commentId) {
 		try {
