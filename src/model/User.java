@@ -22,7 +22,7 @@ public class User {
 	
 	//private ConcurrentHashMap<Integer,Post> likedPosts;
 	//private ConcurrentHashMap<Integer,Post> commentedPosts;
-	private ConcurrentHashMap<Integer, Set<Integer>> comments;
+	private ConcurrentHashMap<Integer, Set<Integer>> comments = new ConcurrentHashMap<>();
 	
 	
 	public User(String username, String name, String password, String email, String profilePicture, ConcurrentHashMap<Integer, Post> posts) {

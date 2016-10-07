@@ -193,10 +193,11 @@ function action2()
                 <!-- Comments Form -->
                 <div class="well">
                     <h4>Leave a comment</h4>
-                    <form role="form">
                     <form action = "WriteCommentServlet" method = "get">
+                    <form role="form">
+                    
                         <div class="form-group">
-                            <textarea class="form-control" name = "comment" rows="3"> </textarea>
+                            <textarea class="form-control" name = "comment"> </textarea>
                         </div>
                         <input id="author" name="post_id" type="hidden" value="<%=post.getPostId() %>" size="30">
                         <input id="username" name="username" type="hidden" value="<%=session.getAttribute("loggedAs").toString() %>" size="30">
@@ -208,14 +209,18 @@ function action2()
                 <hr>
 
                <!-- Posted Comments -->
-				<%  for(Comment comment : CommentsManager.getInstance().getCommentsOfPost(post.getPostId()).values()){ %>
+				<%  
+				 for(Comment comment : CommentsManager.getInstance().getCommentsOfPost(post.getPostId()).values()){ 
+				      User user = UsersManager.getInstance().getUser(comment.getUsername());
+				 
+				 %>
                 <!-- Comment -->
                 <div class="media">
                     <a class="pull-left" href="#">
-                        <img class="media-object" src="PictureServlet?username=<%= UsersManager.getInstance().getUser(session.getAttribute("loggedAs").toString()).getUsername() %>" alt="" width="64" height = "64">
+                        <img class="media-object" src="PictureServlet?username=<%= user.getUsername() %>" alt="" width="64" height = "64">
                     </a>
-                    <div class="media-body">
-                        <h4 class="media-heading"><%= UsersManager.getInstance().getUser(session.getAttribute("loggedAs").toString()).getUsername()%>
+                    <div >
+                        <h4 class="media-heading"><%= user.getUsername()%>
                             <small><%= comment.getUploadDate() %></small>
                         </h4>
                         <%= comment.getText() %>
@@ -225,7 +230,15 @@ function action2()
 
                 
 
-              
+             <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; MyGAG</p>
+                </div>
+            </div>
+            <!-- /.row -->
+        </footer>
 
           
 
