@@ -71,6 +71,34 @@ public class PostDAO {
 		System.out.println("Posts of user loaded successfully");
 		return postsByUser;
 	}
+	
+	
+	public Map<Integer, Post> getPostsLikedByUserFromDB(String username) {
+		Map<Integer, Post> likedPosts = new HashMap<>();
+		try {
+			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(
+					"SELECT U.post_id, U.username, category_name, title, points, upload_date, post_picture "
+					+ "FROM post_upvotes U JOIN posts P ON U.post_id = P.post_id JOIN categories C ON C.category_id = P.category_id "
+					+ "WHERE U.username = ? ;");
+			st.setString(1, username);
+			ResultSet resultSet = st.executeQuery();
+			while (resultSet.next()) {
+				likedPosts.put(resultSet.getInt("post_id"),
+						new Post(resultSet.getInt("post_id"), resultSet.getString("username"),
+								resultSet.getString("category_name"), resultSet.getString("title"),
+								resultSet.getInt("points"), resultSet.getTimestamp("upload_date").toLocalDateTime(),
+								resultSet.getString("post_picture")));
+			}
+			resultSet.close();
+			st.close();
+		} catch (SQLException e) {
+			System.out.println("Oops, cannot select posts of the user.");
+			// e.printStackTrace();
+			return likedPosts;
+		}
+		System.out.println("Posts of user loaded successfully");
+		return likedPosts;
+	}
 
 	public int addPostToDB(String username, String category, String title, LocalDateTime uploadDate, String picture) {
 		int postId = 0;

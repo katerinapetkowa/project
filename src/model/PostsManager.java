@@ -14,6 +14,8 @@ public class PostsManager {
 	private static PostsManager instance;
 	private ConcurrentHashMap<Integer, Post> allPosts;
 	private ConcurrentHashMap<String, HashMap<Integer, Post>> postsByCategories;
+	//private ConcurrentHashMap<Integer, String> postUpvotes;
+	//private ConcurrentHashMap<Integer, String> postDownvotes;
 	//nqkuv set ot users koito sa haresali i ne?? ili vseki post da si gi pazi
 	
 
