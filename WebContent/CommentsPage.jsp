@@ -190,11 +190,12 @@ function action2()
 				<input  type="image" id ="image" src="heart.png" onclick="action();" alt="Submit" width="38" height="38"> <input type="image" id = "image2" src="dislikebutton.png" onclick="action2();" alt="Submit" width="38" height="38">
                 <!-- Blog Comments -->
 
+				<h4> <%= CommentsManager.getInstance().getCommentsByPosts().size() %> comments</h4>
                 <!-- Comments Form -->
                 <div class="well">
                     <h4>Leave a comment</h4>
-                    <form action = "WriteCommentServlet" method = "get">
-                    <form role="form">
+                    <form role  = "form" action = "WriteCommentServlet" method = "get">
+                    
                     
                         <div class="form-group">
                             <textarea class="form-control" name = "comment"> </textarea>
@@ -202,11 +203,11 @@ function action2()
                         <input id="author" name="post_id" type="hidden" value="<%=post.getPostId() %>" size="30">
                         <input id="username" name="username" type="hidden" value="<%=session.getAttribute("loggedAs").toString() %>" size="30">
                         <button type="submit" class="btn btn-primary">Submit</button>
-                       </form>
+                       
                     </form>
                 </div>
 
-                <hr>
+              
 
                <!-- Posted Comments -->
 				<%  
@@ -215,19 +216,20 @@ function action2()
 				 
 				 %>
                 <!-- Comment -->
-                <div class="media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" src="PictureServlet?username=<%= user.getUsername() %>" alt="" width="64" height = "64">
+                <hr>
+                <div class = "media">
+                    <a class = "pull-left" href="#">
+                        <img class="media-object" src="PictureServlet?username=<%= user.getUsername() %>" alt="" width="54" height = "54">
                     </a>
-                    <div >
-                        <h4 class="media-heading"><%= user.getUsername()%>
+                    <div>
+                        <h4  ><%= user.getUsername()%>
                             <small><%= comment.getUploadDate() %></small>
                         </h4>
                         <%= comment.getText() %>
-                   
                     </div>
                 </div>
  <% }  %>
+
                 
 
              <!-- Footer -->
