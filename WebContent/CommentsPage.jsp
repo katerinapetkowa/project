@@ -187,9 +187,13 @@ function action2()
 
 
 				<hr>
-				<input  type="image" id ="image" src="heart.png" onclick="action();" alt="Submit" width="38" height="38"> <input type="image" id = "image2" src="dislikebutton.png" onclick="action2();" alt="Submit" width="38" height="38">
+				
+				<a href="LikeServlet?post_id=<%= post.getPostId()%>"> <input type = "image" id ="image" src="heart.png" onclick="action();" alt="Submit" width="38" height="38"></a> 
+				<a href="DislikeServlet?post_id=<%= post.getPostId()%>"> <input type = "image"  id = "image2" src="dislikebutton.png" onclick="action2();" alt="Submit" width="38" height="38"></a>
+				<br> 
+				<a style = "color:gray" href = ""> <%= post.getPoints() %> points </a>  - <a style = "color:gray" href = ""> <%= CommentsManager.getInstance().getCommentsByPosts().size() %> comments </a>
                 <!-- Blog Comments -->
-
+				 
 				<h4> <%= CommentsManager.getInstance().getCommentsByPosts().size() %> comments</h4>
                 <!-- Comments Form -->
                 <div class="well">
