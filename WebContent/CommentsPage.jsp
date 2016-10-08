@@ -230,11 +230,9 @@ function action2()
                             <small><%= comment.getUploadDate() %></small>
                         </h4>
                         <%= comment.getText() %>
-                    
                     </div>
                 </div>
-                <% }  %>
-                <hr>
+ <% }  %>
 
                 
 

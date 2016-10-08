@@ -3,7 +3,9 @@ package model;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,8 +16,8 @@ public class PostsManager {
 	private static PostsManager instance;
 	private ConcurrentHashMap<Integer, Post> allPosts;
 	private ConcurrentHashMap<String, HashMap<Integer, Post>> postsByCategories;
-	//private ConcurrentHashMap<Integer, String> postUpvotes;
-	//private ConcurrentHashMap<Integer, String> postDownvotes;
+	private ConcurrentHashMap<Integer, HashSet<String>> postUpvotes;
+	private ConcurrentHashMap<Integer, HashSet<String>> postDownvotes;
 	//nqkuv set ot users koito sa haresali i ne?? ili vseki post da si gi pazi
 	
 
@@ -38,6 +40,14 @@ public class PostsManager {
 
 		}
 		System.out.println("Posts by category loaded successfully in collection");
+		
+		postUpvotes = new ConcurrentHashMap<>();
+		postUpvotes.putAll(PostDAO.getInstance().getPostsUpvotesFromDB());
+		System.out.println("Post upvotes loaded successfully in collection");
+		
+		postDownvotes = new ConcurrentHashMap<>();
+		postDownvotes.putAll(PostDAO.getInstance().getPostsDownvotesFromDB());
+		System.out.println("Post downvotes loaded successfully in collection");
 
 	}
 
@@ -106,6 +116,10 @@ public class PostsManager {
 
 	//TODO change points in collections, in db, add to table of likes, add to collection of likes
 	public void upVotePost(String username, int postId) {
+		if(!PostsManager.getInstance().postUpvotes.containsKey(postId)){
+			PostsManager.getInstance().postUpvotes.put(postId,new HashSet<String>());
+		}
+		PostsManager.getInstance().postUpvotes.get(postId).add(username);
 		PostsManager.getInstance().allPosts.get(postId).getUpVote();
 		String category = PostsManager.getInstance().getPost(postId).getCategory();
 		PostsManager.getInstance().postsByCategories.get(category).get(postId).getUpVote();
@@ -115,6 +129,10 @@ public class PostsManager {
 
 	//TODO change method
 	public void downVotePost(String username, int postId) {
+		if(!PostsManager.getInstance().postDownvotes.containsKey(postId)){
+			PostsManager.getInstance().postDownvotes.put(postId,new HashSet<String>());
+		}
+		PostsManager.getInstance().postDownvotes.get(postId).add(username);
 		PostsManager.getInstance().allPosts.get(postId).getDownVote();
 		String category = PostsManager.getInstance().getPost(postId).getCategory();
 		PostsManager.getInstance().postsByCategories.get(category).get(postId).getDownVote();
