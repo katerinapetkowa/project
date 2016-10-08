@@ -22,6 +22,7 @@ public class CommentsManager {
 			}
 			commentsByPosts.get(c.getPostId()).put(c.getCommentId(), c);
 		}
+		
 	}
 	
 	public synchronized static CommentsManager getInstance(){
@@ -33,6 +34,7 @@ public class CommentsManager {
 	
 	public Map<Integer, HashMap<Integer, Comment>> getCommentsByPosts() {
 		return Collections.unmodifiableMap(commentsByPosts);
+		
 	}
 	
 	public ConcurrentHashMap<Integer,Comment> getCommentsOfPost(int postId){

@@ -21,7 +21,7 @@ public class LikeServlet extends HttpServlet {
 		request.setAttribute("post_id", postId);
 		String logged =(String) request.getSession().getAttribute("loggedAs");
 		Post post=PostsManager.getInstance().getPost(postId);
-		PostsManager.getInstance().upVotePost(postId);
+		PostsManager.getInstance().upVotePost(logged,postId);
 		RequestDispatcher view = request.getRequestDispatcher("DetailsPostServlet?post_id="+postId);
 		view.forward(request, response);
 	}
