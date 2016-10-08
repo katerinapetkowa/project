@@ -13,7 +13,7 @@ import model.Post;
 import model.PostsManager;
 
 
-@WebServlet("/LikesServlet")
+@WebServlet("/LikeServlet")
 public class LikeServlet extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

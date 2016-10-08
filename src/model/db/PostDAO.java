@@ -73,7 +73,53 @@ public class PostDAO {
 	}
 	
 	
-	public Map<Integer, Post> getPostsLikedByUserFromDB(String username) {
+	public Map<Integer, HashSet<String>> getPostsUpvotesFromDB() {
+		Map<Integer, HashSet<String>> posts = new HashMap<>();
+		try {
+			Statement st = DBManager.getInstance().getConnection().createStatement();
+			ResultSet resultSet = st.executeQuery("SELECT post_id, username FROM post_upvotes;");
+			while (resultSet.next()) {
+				if(!posts.containsKey(resultSet.getInt("post_id"))){
+					posts.put(resultSet.getInt("post_id"), new HashSet<String>());
+				}
+				posts.get(resultSet.getInt("post_id")).add(resultSet.getString("username"));
+			}
+			resultSet.close();
+			st.close();
+		} catch (SQLException e) {
+			System.out.println("Oops, cannot select upvotes of the posts.");
+			// e.printStackTrace();
+			return posts;
+		}
+		System.out.println("Upvotes of posts loaded successfully");
+		return posts;
+	}
+	
+	
+	public Map<Integer, HashSet<String>> getPostsDownvotesFromDB() {
+		Map<Integer, HashSet<String>> posts = new HashMap<>();
+		try {
+			Statement st = DBManager.getInstance().getConnection().createStatement();
+			ResultSet resultSet = st.executeQuery("SELECT post_id, username FROM post_downvotes;");
+			while (resultSet.next()) {
+				if(!posts.containsKey(resultSet.getInt("post_id"))){
+					posts.put(resultSet.getInt("post_id"), new HashSet<String>());
+				}
+				posts.get(resultSet.getInt("post_id")).add(resultSet.getString("username"));
+			}
+			resultSet.close();
+			st.close();
+		} catch (SQLException e) {
+			System.out.println("Oops, cannot select downvotes of the posts.");
+			// e.printStackTrace();
+			return posts;
+		}
+		System.out.println("Downvotes of posts loaded successfully");
+		return posts;
+	}
+	
+	
+	public Map<Integer, Post> getPostsUpvotedByUserFromDB(String username) {
 		Map<Integer, Post> likedPosts = new HashMap<>();
 		try {
 			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(
@@ -92,11 +138,11 @@ public class PostDAO {
 			resultSet.close();
 			st.close();
 		} catch (SQLException e) {
-			System.out.println("Oops, cannot select posts of the user.");
+			System.out.println("Oops, cannot select upvoted posts of the user.");
 			// e.printStackTrace();
 			return likedPosts;
 		}
-		System.out.println("Posts of user loaded successfully");
+		System.out.println("Upvoted posts of user loaded successfully");
 		return likedPosts;
 	}
 

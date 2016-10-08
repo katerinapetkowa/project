@@ -99,9 +99,9 @@ public class CommentDAO {
 			}
 			rs.close();
 			st.close();
-			System.out.println("Post added successfully to db");
+			System.out.println("Comment added successfully to db");
 		} catch (SQLException e) {
-			System.out.println("Oops .. did not save the post in db");
+			System.out.println("Oops .. did not save the comment in db");
 			e.printStackTrace();
 		}
 		return commentId;
