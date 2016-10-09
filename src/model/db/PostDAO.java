@@ -51,9 +51,10 @@ public class PostDAO {
 		Map<Integer, Post> postsByUser = new HashMap<>();
 		try {
 			String query = "SELECT post_id, username, category_name, title, points, upload_date, post_picture "
-					+ "FROM posts P JOIN categories C ON P.category_id = C.category_id WHERE username= " + username + ";";
-			Statement st = DBManager.getInstance().getConnection().createStatement();
-			ResultSet resultSet = st.executeQuery(query);
+					+ "FROM posts P JOIN categories C ON P.category_id = C.category_id WHERE username= ? ;";
+			PreparedStatement ps = DBManager.getInstance().getConnection().prepareStatement(query);
+			ps.setString(1, username);
+			ResultSet resultSet = ps.executeQuery();
 			while (resultSet.next()) {
 				postsByUser.put(resultSet.getInt("post_id"),
 						new Post(resultSet.getInt("post_id"), resultSet.getString("username"),
@@ -62,7 +63,7 @@ public class PostDAO {
 								resultSet.getString("post_picture")));
 			}
 			resultSet.close();
-			st.close();
+			ps.close();
 		} catch (SQLException e) {
 			System.out.println("Oops, cannot select posts of the user.");
 			// e.printStackTrace();

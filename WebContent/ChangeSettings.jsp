@@ -1,6 +1,7 @@
 <%@page import="model.UsersManager"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -36,17 +37,16 @@
 
 
 
-
 				<div class="field-wrap">
 					<input type="text" name="name" maxlength="50"
-						value="<%=UsersManager.getInstance().getUser(session.getAttribute("loggedAs").toString()).getName()%> "
+						value="${UsersManager.getInstance().getUser(sessionScope.loggedAs).getName()}"
 						required autocomplete="off" />
 					<small style="color: white"><b>Name</b> </small>
 				</div>
 
 				<div class="field-wrap">
 					<input type="email" name="email" maxlength="40"
-						value="<%=UsersManager.getInstance().getUser(session.getAttribute("loggedAs").toString()).getEmail()%> "
+						value="${UsersManager.getInstance().getUser(sessionScope.loggedAs).getEmail()}"
 						required autocomplete="off" />
 						<small style="color: white"><b> Email </b></small>
 				</div>

@@ -1,6 +1,7 @@
 <%@page import="model.UsersManager"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="model.PostsManager"%>
 <%@ page import="model.Post"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -36,13 +37,17 @@
 </head>
 
 <body>
-	<%
-		if (session.getAttribute("loggedAs") == null) {
 
-			request.getRequestDispatcher("index.html").forward(request, response);
+<c:if test="${sessionScope.loggedAs == null}">
+	${pageContext.request}.getRequestDispatcher("index.html").forward(request, response);
+</c:if>
+<%-- 	<% --%>
+<%-- 		if (session.getAttribute("loggedAs") == null) { --%>
 
-		}
-	%>
+<%--		request.getRequestDispatcher("index.html").forward(request, response); --%>
+
+<%--	} --%>
+<%-- 	%> --%>
 	<!-- Navigation -->
 	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 	<div class="container">
@@ -111,34 +116,32 @@
 				<h1 class="page-header">My profile</h1>
 				<p>
 				<hr>
-				<h4><%= UsersManager.getInstance().getUser(session.getAttribute("loggedAs").toString()).getUsername()%></h4>
+				<h4>${UsersManager.getInstance().getUser(sessionScope.loggedAs).getUsername()}</h4>
 				<img class="img-responsive"
-					src="PictureServlet?username=<%= UsersManager.getInstance().getUser(session.getAttribute("loggedAs").toString()).getUsername() %>" alt="" width="100">
+					src="PictureServlet?username=${UsersManager.getInstance().getUser(sessionScope.loggedAs).getUsername()}" alt="" width="100">
 				<button class="dropbtnlog" type = "submit" onclick="window.location.href='/MyGag/ChangeSettings.jsp'">Change profile</button>
 				
 				<hr>
 				</p>
 				
+				<c:forEach var='post' items='${UsersManager.getInstance().getUser(sessionScope.loggedAs).getFreshPosts().values()}'>
 				
-				<%
-					for (Post post : UsersManager.getInstance().getUser(session.getAttribute("loggedAs").toString()).getFreshPosts().values()) {
-				%>
+				
 				<!-- First Blog Post -->
 				<h2>
-					<a style = "text-decoration: none; color:#222222" onmouseover="this.style.color = '#23527c'" onmouseout="this.style.color = '#222222'" href="DetailsPostServlet?post_id=<%= post.getPostId()%>"><%=post.getTitle()%></a>
+					<a style = "text-decoration: none; color:#222222" onmouseover="this.style.color = '#23527c'" onmouseout="this.style.color = '#222222'" 
+					href="DetailsPostServlet?post_id=${post.postId}"><c:out value="${post.title}"></c:out></a>
 				</h2>
 
 				<p>
 					<span class="glyphicon glyphicon-time"></span>
-					<%=post.getUploadDate()%></p>
+					${post.uploadDate}</p>
 				<hr>
-				<a href="DetailsPostServlet?post_id=<%= post.getPostId()%>"> <img class="img-responsive"
-					src="PostServlet?post_id=<%=post.getPostId()%>" alt="" width="500"></a>
+				<a href="DetailsPostServlet?post_id=${post.postId}"> <img class="img-responsive"
+					src="PostServlet?post_id=${post.postId}" alt="" width="500"></a>
 				<hr>
 
-				<%
-					}
-				%>
+				</c:forEach>
 			</div>
 		</div>
 
