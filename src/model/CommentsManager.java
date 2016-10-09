@@ -52,6 +52,14 @@ public class CommentsManager {
 		return commentsByPosts.get(postId).get(commentId);
 	}
 	
+	public int getNumberOfCommentsOfPost(int postId){
+		int comments = 0;
+		if(CommentsManager.getInstance().commentsByPosts.containsKey(postId)){
+			comments = CommentsManager.getInstance().commentsByPosts.get(postId).size();
+		}
+		return comments;
+	}
+	
 	public void uploadComment(String username, int postId, String text, int points, LocalDateTime uploadDate){
 		int commentId = CommentDAO.getInstance().addCommentToDB(username, postId, text, points, uploadDate);
 		Comment comment = new Comment(commentId, username, postId, text, points, uploadDate);
