@@ -6,6 +6,8 @@
 <%@ page import="model.User" %>
 <%@ page import="model.CommentsManager" %>
 <%@ page import="model.Comment" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -170,33 +172,31 @@ function action2()
             <div class="col-lg-8">
 
                 <!-- Blog Post -->
-<%
-    Post post = PostsManager.getInstance().getPost(Integer.parseInt(request.getAttribute("post_id").toString()));
-	
-	%>
+
+	 		 <c:set var = "post" value="${PostsManager.getInstance().getPost(param.post_id)}" scope = "page"/>
                 <!-- Title -->
-                <h1><%= post.getTitle() %></h1>
+                <h1><c:out value="${post.title}"></c:out></h1>
 
                 <hr>
 
                 <!-- Date/Time -->
-                <p><span class="glyphicon glyphicon-time"></span> <%= post.getUploadDate() %></p>
+                <p><span class="glyphicon glyphicon-time"></span> <c:out value="${post.uploadDate}"></c:out></p>
 
                 <hr>
 
                 <!-- Preview Image -->
-                <img class="img-responsive" src="PostServlet?post_id=<%= post.getPostId()%>" alt="" width = "500">
+                <img class="img-responsive" src="PostServlet?post_id=<c:out value="${post.postId}"></c:out>" alt="" width = "500">
 
 
 				<hr>
 				
-				<a href="LikeServlet?post_id=<%= post.getPostId()%>"> <input type = "image" id ="image" src="heart.png" onclick="action();" alt="Submit" width="38" height="38"></a> 
-				<a href="DislikeServlet?post_id=<%= post.getPostId()%>"> <input type = "image"  id = "image2" src="dislikebutton.png" onclick="action2();" alt="Submit" width="38" height="38"></a>
+				<a href="LikeServlet?post_id=<c:out value="${post.postId}"></c:out>"> <input type = "image" id ="image" src="heart.png" onclick="action();" alt="Submit" width="38" height="38"></a> 
+				<a href="DislikeServlet?post_id=<c:out value="${post.postId}"></c:out>"> <input type = "image"  id = "image2" src="dislikebutton.png" onclick="action2();" alt="Submit" width="38" height="38"></a>
 				<br> 
-				<a style = "color:gray" href = ""> <%= post.getPoints() %> points </a>  - <a style = "color:gray" href = ""> <%= CommentsManager.getInstance().getNumberOfCommentsOfPost(post.getPostId()) %> comments </a>
+				<a style = "color:gray" href = ""> <c:out value="${post.points}"></c:out> points </a>  - <a style = "color:gray" href = ""> <c:out value = "${CommentsManager.getInstance().getNumberOfCommentsOfPost(post.postId)}"></c:out> comments </a>
                 <!-- Blog Comments -->
 				 
-				<h4> <%= CommentsManager.getInstance().getNumberOfCommentsOfPost(post.getPostId()) %> comments</h4>
+				<h4> <c:out value = "${CommentsManager.getInstance().getNumberOfCommentsOfPost(post.postId)}"></c:out> comments</h4>
                 <!-- Comments Form -->
                 <div class="well">
                     <h4>Leave a comment</h4>
@@ -205,9 +205,9 @@ function action2()
                     
                         <div class="form-group">
                             <textarea class="form-control" name = "comment"> </textarea>
-                        </div>
-                        <input id="author" name="post_id" type="hidden" value="<%=post.getPostId() %>" size="30">
-                        <input id="username" name="username" type="hidden" value="<%=session.getAttribute("loggedAs").toString() %>" size="30">
+                        </div> 
+                        <input id="author" name="post_id" type="hidden" value="<c:out value= "${post.postId}"></c:out>" size="30">
+                        <input id="username" name="username" type="hidden" value="<c:out value="${sessionScope.loggedAs}"></c:out>" size="30">
                         <button type="submit" class="btn btn-primary">Submit</button>
                        
                     </form>
@@ -216,25 +216,24 @@ function action2()
               
 
                <!-- Posted Comments -->
-				<%  
-				 for(Comment comment : CommentsManager.getInstance().getCommentsOfPost(post.getPostId()).values()){ 
-				      User user = UsersManager.getInstance().getUser(comment.getUsername());
-				 
-				 %>
+				
+				 <c:forEach var = "comment" items='${CommentsManager.getInstance().getCommentsOfPost(post.postId).values()}' >
+				 <c:set var = "user" value = "${UsersManager.getInstance().getUser(comment.username)}"> </c:set>
                 <!-- Comment -->
                 <hr>
                 <div class = "media">
                     <a class = "pull-left" href="#">
-                        <img class="media-object" src="PictureServlet?username=<%= user.getUsername() %>" alt="" width="54" height = "54">
+                        <img class="media-object" src="PictureServlet?username=<c:out value="${user.username}"></c:out>" alt="" width="54" height = "54">
                     </a>
                     <div>
-                        <h4  ><%= user.getUsername()%>
-                            <small><%= comment.getUploadDate() %></small>
+                        <h4><c:out value="${user.username}"></c:out>
+                            <small><c:out value="${comment.uploadDate}"></c:out></small>
                         </h4>
-                        <%= comment.getText() %>
+                        <c:out value="${comment.text}"></c:out>
                     </div>
                 </div>
- <% }  %>
+
+ </c:forEach>
 
                 
 
