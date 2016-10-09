@@ -15,16 +15,16 @@ public class User {
 	private String email;
 	private String profilePicture;
 
-	private ConcurrentHashMap<Integer,Post> posts; //post id -> post
-	//collections of liked/commented posts ??
-	//collection of comments of other user's posts
-	
-	//private ConcurrentHashMap<Integer,Post> likedPosts;
-	//private ConcurrentHashMap<Integer,Post> commentedPosts;
+	private ConcurrentHashMap<Integer, Post> posts; // post id -> post
+	// collections of liked/commented posts ??
+	// collection of comments of other user's posts
+
+	// private ConcurrentHashMap<Integer,Post> likedPosts;
+	// private ConcurrentHashMap<Integer,Post> commentedPosts;
 	private ConcurrentHashMap<Integer, Set<Integer>> comments = new ConcurrentHashMap<>();
-	
-	
-	public User(String username, String name, String password, String email, String profilePicture, ConcurrentHashMap<Integer, Post> posts) {
+
+	public User(String username, String name, String password, String email, String profilePicture,
+			ConcurrentHashMap<Integer, Post> posts) {
 
 		this.username = username;
 		this.name = name;
@@ -113,11 +113,15 @@ public class User {
 	}
 
 	public void getUpVoteOfPost(int postId) {
-		this.posts.get(postId).getUpVote();
+		if (this.posts.containsKey(postId)) {
+			this.posts.get(postId).getUpVote();
+		}
 	}
 
 	public void getDownVoteOfPost(int postId) {
-		this.posts.get(postId).getDownVote();
+		if (this.posts.containsKey(postId)) {
+			this.posts.get(postId).getDownVote();
+		}
 	}
 
 }

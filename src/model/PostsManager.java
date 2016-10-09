@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -140,6 +139,7 @@ public class PostsManager {
 		PostDAO.getInstance().downvotePostInDB(username, postId);
 	}
 	
+	//TODO reverse upvotes and downvotes methods and transition from one to other method
 	
 	public Map<Integer, Post> searchPosts(String title){
 		Map<Integer, Post> posts = new HashMap<>();

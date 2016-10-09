@@ -38,12 +38,13 @@ public class CommentsManager {
 	}
 	
 	public HashMap<Integer,Comment> getCommentsOfPost(int postId){
-//		ConcurrentHashMap<Integer,Comment> commentsOfPost = new ConcurrentHashMap<>();
-//		if(CommentsManager.getInstance().getCommentsByPosts().containsKey(postId)){
-//			commentsOfPost.putAll(CommentsManager.getInstance().getCommentsByPosts().get(postId));
-//		}
-//		return commentsOfPost;
+		HashMap<Integer,Comment> commentsOfPost = new HashMap<>();
+		if(!CommentsManager.getInstance().getCommentsByPosts().containsKey(postId)){
+			return commentsOfPost;
+		}
+		commentsOfPost.putAll(CommentsManager.getInstance().getCommentsByPosts().get(postId));
 		System.out.println(commentsByPosts.get(postId).size());
+		//return commentsOfPost;
 		return commentsByPosts.get(postId);
 	}
 	
@@ -55,10 +56,11 @@ public class CommentsManager {
 		int commentId = CommentDAO.getInstance().addCommentToDB(username, postId, text, points, uploadDate);
 		Comment comment = new Comment(commentId, username, postId, text, points, uploadDate);
 		System.out.println(comment.toString());
-		if(!CommentsManager.getInstance().commentsByPosts.contains(postId)){
+		if(!CommentsManager.getInstance().commentsByPosts.containsKey(postId)){
 			CommentsManager.getInstance().commentsByPosts.put(postId, new HashMap<Integer, Comment>());
 			System.out.println("adding post id to collection of comments by posts");
 		}
+		System.out.println(commentsByPosts.get(postId).size());
 		CommentsManager.getInstance().commentsByPosts.get(postId).put(commentId, comment);
 		System.out.println("adding comment by id to collection by post ids");
 		UsersManager.getInstance().getUser(username).addCommentToUser(postId, commentId);
