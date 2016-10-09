@@ -36,6 +36,7 @@
 
 </head>
 
+
 <body>
 	<% if(session.getAttribute("loggedAs") == null){ 
 	
@@ -124,7 +125,7 @@
 				<% for(Post post : PostsManager.getInstance().getFreshPosts().values()){  %>
                 <!-- First Blog Post -->
                 <h2>
-                    <a href="DetailsPostServlet?post_id=<%= post.getPostId()%>"> <%= post.getTitle() %></a>
+                    <a style = "text-decoration: none; color:#222222" onmouseover="this.style.color = '#23527c'" onmouseout="this.style.color = '#222222'" href="DetailsPostServlet?post_id=<%= post.getPostId()%>"> <%= post.getTitle() %></a>
                 </h2>
                
                 <p><span class="glyphicon glyphicon-time"></span> <%= post.getUploadDate() %></p>
