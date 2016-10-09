@@ -69,8 +69,7 @@
 				<li><a href="MovieTV.jsp">MovieTV</a></li>
 				<li><a href="Sport.jsp">Sport</a></li>
 				<li><a href="Food.jsp">Food</a></li>
-				<li><a class="button button-block "
-					href="/MyGag/UploadPost.html"> Upload </a></li>
+				<li><a href="/MyGag/UploadPost.html"> Upload </a></li>
 
 				<div class="dropdown">
 					<button class="dropbtn">Settings</button>
@@ -126,15 +125,15 @@
 				%>
 				<!-- First Blog Post -->
 				<h2>
-					<a href="#"><%=post.getTitle()%></a>
+					<a href="DetailsPostServlet?post_id=<%= post.getPostId()%>"><%=post.getTitle()%></a>
 				</h2>
 
 				<p>
 					<span class="glyphicon glyphicon-time"></span>
 					<%=post.getUploadDate()%></p>
 				<hr>
-				<img class="img-responsive"
-					src="PostServlet?post_id=<%=post.getPostId()%>" alt="" width="500">
+				<a href="DetailsPostServlet?post_id=<%= post.getPostId()%>"> <img class="img-responsive"
+					src="PostServlet?post_id=<%=post.getPostId()%>" alt="" width="500"></a>
 				<hr>
 
 				<%
