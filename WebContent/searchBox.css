@@ -1,5 +1,5 @@
 input[type=text] {
-    width: 250px;
+    width: 150px;
     height: 55px;
     box-sizing: border-box;
     border: 2px solid #ccc;
@@ -16,5 +16,5 @@ input[type=text] {
 }
 
 input[type=text]:focus {
-    width: 300px;
+    width: 200px;
 }

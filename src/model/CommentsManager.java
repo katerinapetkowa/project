@@ -61,7 +61,8 @@ public class CommentsManager {
 	}
 	
 	//TODO add commented post to collection of user's commented posts
-	
+
+	//TODO change method
 	public void uploadComment(String username, int postId, String text, int points, LocalDateTime uploadDate){
 		int commentId = CommentDAO.getInstance().addCommentToDB(username, postId, text, points, uploadDate);
 		Comment comment = new Comment(commentId, username, postId, text, points, uploadDate);
@@ -75,7 +76,8 @@ public class CommentsManager {
 		System.out.println("adding comment by id to collection by post ids");
 		UsersManager.getInstance().getUser(username).addCommentToUser(postId, commentId);
 	}
-	
+
+	//TODO change method
 	public void deleteComment(String username, int postId, int commentId){
 		UsersManager.getInstance().getUser(username).deleteCommentFromUser(postId, commentId);
 		CommentsManager.getInstance().commentsByPosts.get(postId).remove(commentId);
@@ -83,6 +85,8 @@ public class CommentsManager {
 		CommentDAO.getInstance().deleteCommentFromDB(commentId);
 	}
 	
+
+	//TODO change method
 	public void deleteAllCommentsOfPost(int postId){
 		
 		CommentsManager.getInstance().commentsByPosts.remove(postId);

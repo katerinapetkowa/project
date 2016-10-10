@@ -3,7 +3,9 @@ package model;
 import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import model.db.UserDAO;
 
@@ -42,7 +44,9 @@ public class UsersManager {
 
 	public void registerUser(String username, String name, String password, String email, String profilePicture) {
 		UserDAO.getInstance().addUserToDB(username, name, password, email, profilePicture);
-		User user = new User(username, name, password, email, profilePicture, new ConcurrentHashMap<Integer, Post>());
+		User user = new User(username, name, password, email, profilePicture, new ConcurrentHashMap<Integer, Post>(),
+				new ConcurrentHashMap<Integer, Post>(), new ConcurrentHashMap<Integer, Post>(),
+				new ConcurrentHashMap<Integer, Set<Integer>>(), new ConcurrentSkipListSet<Integer>());
 		registerredUsers.put(username, user);
 		System.out.println("User added successfully to collection of all users");
 	}
@@ -102,9 +106,12 @@ public class UsersManager {
 		}
 		return null;
 	}
-	
-	public void deleteUser(String username){
-		//TODO delete comments of user from collections?
+
+	//TODO change method
+	public void deleteUser(String username) {
+		// TODO delete comments of user from collections?, delete upvotes and downvotes
+		
+		
 		UsersManager.getInstance().registerredUsers.remove(username);
 		UserDAO.getInstance().deleteUserFromDB(username);
 	}

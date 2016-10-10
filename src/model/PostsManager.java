@@ -123,6 +123,8 @@ public class PostsManager {
 		String category = PostsManager.getInstance().getPost(postId).getCategory();
 		PostsManager.getInstance().postsByCategories.get(category).get(postId).getUpVote();
 		UsersManager.getInstance().getUser(username).getUpVoteOfPost(postId);
+		Post post = PostsManager.getInstance().getPost(postId);
+		UsersManager.getInstance().getUser(username).upvotePost(postId, post);
 		PostDAO.getInstance().upvotePostInDB(username, postId);
 	}
 
@@ -135,6 +137,7 @@ public class PostsManager {
 		String category = PostsManager.getInstance().getPost(postId).getCategory();
 		PostsManager.getInstance().postsByCategories.get(category).get(postId).getDownVote();
 		UsersManager.getInstance().getUser(username).getDownVoteOfPost(postId);
+		UsersManager.getInstance().getUser(username).downvotePost(postId);
 		PostDAO.getInstance().downvotePostInDB(username, postId);
 	}
 
@@ -144,6 +147,7 @@ public class PostsManager {
 		String category = PostsManager.getInstance().getPost(postId).getCategory();
 		PostsManager.getInstance().postsByCategories.get(category).get(postId).getDownVote();
 		UsersManager.getInstance().getUser(username).getDownVoteOfPost(postId);
+		UsersManager.getInstance().getUser(username).removeUpvoteOfPost(postId);
 		PostDAO.getInstance().reverseUpvoteInDB(username, postId);
 	}
 
@@ -153,6 +157,7 @@ public class PostsManager {
 		String category = PostsManager.getInstance().getPost(postId).getCategory();
 		PostsManager.getInstance().postsByCategories.get(category).get(postId).getUpVote();
 		UsersManager.getInstance().getUser(username).getUpVoteOfPost(postId);
+		UsersManager.getInstance().getUser(username).removeDownvoteOfPost(postId);
 		PostDAO.getInstance().reverseDownvoteInDB(username, postId);
 
 	}
@@ -165,6 +170,8 @@ public class PostsManager {
 			PostsManager.getInstance().postsByCategories.get(category).get(postId).getDownVote();
 			UsersManager.getInstance().getUser(username).getDownVoteOfPost(postId);
 		}
+		UsersManager.getInstance().getUser(username).removeUpvoteOfPost(postId);
+		UsersManager.getInstance().getUser(username).downvotePost(postId);
 		PostDAO.getInstance().upvoteToDownvteInDB(username, postId);
 
 	}
@@ -177,6 +184,9 @@ public class PostsManager {
 			PostsManager.getInstance().postsByCategories.get(category).get(postId).getUpVote();
 			UsersManager.getInstance().getUser(username).getUpVoteOfPost(postId);
 		}
+		UsersManager.getInstance().getUser(username).removeDownvoteOfPost(postId);
+		Post post = PostsManager.getInstance().getPost(postId);
+		UsersManager.getInstance().getUser(username).upvotePost(postId, post);
 		PostDAO.getInstance().downvoteToUpvoteInDB(username, postId);
 	}
 
@@ -190,15 +200,23 @@ public class PostsManager {
 		return posts;
 	}
 
+	//TODO change method
 	public void deletePost(int postId) {
+		for (Comment c : CommentsManager.getInstance().getCommentsOfPost(postId).values()) {
+			UsersManager.getInstance().getUser(c.getUsername()).deleteCommentFromUser(postId, c.getCommentId());
+		}
+		
+		CommentsManager.getInstance().deleteAllCommentsOfPost(postId);
 		PostsManager.getInstance().allPosts.remove(postId);
 		String postCategory = PostsManager.getInstance().getPost(postId).getCategory();
 		PostsManager.getInstance().postsByCategories.get(postCategory).remove(postId);
 		PostDAO.getInstance().deletePostFromDB(postId);
-		for (Comment c : CommentsManager.getInstance().getCommentsOfPost(postId).values()) {
-			UsersManager.getInstance().getUser(c.getUsername()).deleteCommentFromUser(postId, c.getCommentId());
+		for(String username : PostsManager.getInstance().postUpvotes.get(postId)){
+			UsersManager.getInstance().getUser(username).removeUpvoteOfPost(postId);
 		}
-		CommentsManager.getInstance().deleteAllCommentsOfPost(postId);
+		for(String username : PostsManager.getInstance().postDownvotes.get(postId)){
+			UsersManager.getInstance().getUser(username).removeDownvoteOfPost(postId);
+		}
 	}
 
 }

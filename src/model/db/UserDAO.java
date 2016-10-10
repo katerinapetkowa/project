@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import model.Post;
 import model.User;
@@ -32,11 +33,20 @@ public class UserDAO {
 			ResultSet resultSet = st
 					.executeQuery("SELECT username, name, password, email, profile_picture FROM users;");
 			while (resultSet.next()) {
+				String username = resultSet.getString("username");
 				ConcurrentHashMap<Integer, Post> posts = new ConcurrentHashMap<>();
-				posts.putAll(PostDAO.getInstance().getPostsByUserFromDB(resultSet.getString("username")));
+				posts.putAll(PostDAO.getInstance().getPostsByUserFromDB(username));
+				ConcurrentHashMap<Integer, Post> upvotedPosts = new ConcurrentHashMap<>();
+				upvotedPosts.putAll(PostDAO.getInstance().getPostsUpvotedByUserFromDB(username));
+				ConcurrentHashMap<Integer, Post> commentedPosts = new ConcurrentHashMap<>();
+				commentedPosts.putAll(PostDAO.getInstance().getPostsCommentedByUserFromDB(username));
+				ConcurrentSkipListSet<Integer> downvotedPosts = new ConcurrentSkipListSet<>();
+				downvotedPosts.addAll(PostDAO.getInstance().getPostDownvotesByUser(username));
+				ConcurrentHashMap<Integer, Set<Integer>> comments = new ConcurrentHashMap<>();
+				comments.putAll(PostDAO.getInstance().getCommentsOfOtherPostsOfUser(username));
 				users.add(new User(resultSet.getString("username"),
 						resultSet.getString("name"), resultSet.getString("password"), resultSet.getString("email"),
-						resultSet.getString("profile_picture"), posts));
+						resultSet.getString("profile_picture"), posts, upvotedPosts, commentedPosts, comments, downvotedPosts));
 			}
 			resultSet.close();
 			st.close();
@@ -128,6 +138,7 @@ public class UserDAO {
 		}
 	}
 
+	//TODO change method
 	public void deleteUserFromDB(String username) {
 		PreparedStatement deleteCommentsOfUser = null;
 		PreparedStatement deleteCommentsOfPost = null;

@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import model.Post;
 
@@ -72,15 +74,14 @@ public class PostDAO {
 		System.out.println("Posts of user loaded successfully");
 		return postsByUser;
 	}
-	
-	
+
 	public Map<Integer, HashSet<String>> getPostsUpvotesFromDB() {
 		Map<Integer, HashSet<String>> posts = new HashMap<>();
 		try {
 			Statement st = DBManager.getInstance().getConnection().createStatement();
 			ResultSet resultSet = st.executeQuery("SELECT post_id, username FROM post_upvotes;");
 			while (resultSet.next()) {
-				if(!posts.containsKey(resultSet.getInt("post_id"))){
+				if (!posts.containsKey(resultSet.getInt("post_id"))) {
 					posts.put(resultSet.getInt("post_id"), new HashSet<String>());
 				}
 				posts.get(resultSet.getInt("post_id")).add(resultSet.getString("username"));
@@ -95,15 +96,14 @@ public class PostDAO {
 		System.out.println("Upvotes of posts loaded successfully");
 		return posts;
 	}
-	
-	
+
 	public Map<Integer, HashSet<String>> getPostsDownvotesFromDB() {
 		Map<Integer, HashSet<String>> posts = new HashMap<>();
 		try {
 			Statement st = DBManager.getInstance().getConnection().createStatement();
 			ResultSet resultSet = st.executeQuery("SELECT post_id, username FROM post_downvotes;");
 			while (resultSet.next()) {
-				if(!posts.containsKey(resultSet.getInt("post_id"))){
+				if (!posts.containsKey(resultSet.getInt("post_id"))) {
 					posts.put(resultSet.getInt("post_id"), new HashSet<String>());
 				}
 				posts.get(resultSet.getInt("post_id")).add(resultSet.getString("username"));
@@ -118,15 +118,14 @@ public class PostDAO {
 		System.out.println("Downvotes of posts loaded successfully");
 		return posts;
 	}
-	
-	
+
 	public Map<Integer, Post> getPostsUpvotedByUserFromDB(String username) {
 		Map<Integer, Post> likedPosts = new HashMap<>();
 		try {
 			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(
 					"SELECT U.post_id, U.username, category_name, title, points, upload_date, post_picture "
-					+ "FROM post_upvotes U JOIN posts P ON U.post_id = P.post_id JOIN categories C ON C.category_id = P.category_id "
-					+ "WHERE U.username = ? ;");
+							+ "FROM post_upvotes U JOIN posts P ON U.post_id = P.post_id JOIN categories C ON C.category_id = P.category_id "
+							+ "WHERE U.username = ? ;");
 			st.setString(1, username);
 			ResultSet resultSet = st.executeQuery();
 			while (resultSet.next()) {
@@ -145,6 +144,77 @@ public class PostDAO {
 		}
 		System.out.println("Upvoted posts of user loaded successfully");
 		return likedPosts;
+	}
+	
+	public Set<Integer> getPostDownvotesByUser(String username){
+		Set<Integer> downvotedPosts = new ConcurrentSkipListSet<>();
+		try {
+			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(
+					"SELECT post_id FROM post_downvotes WHERE username = ? ;");
+			st.setString(1, username);
+			ResultSet resultSet = st.executeQuery();
+			while (resultSet.next()) {
+				downvotedPosts.add(resultSet.getInt("post_id"));
+			}
+			resultSet.close();
+			st.close();
+		} catch (SQLException e) {
+			System.out.println("Oops, cannot select downvoted posts of the user.");
+			// e.printStackTrace();
+			return downvotedPosts;
+		}
+		System.out.println("Downvoted posts of user loaded successfully");
+		return downvotedPosts;
+	}
+
+	public Map<Integer, Post> getPostsCommentedByUserFromDB(String username) {
+		Map<Integer, Post> commentedPosts = new HashMap<>();
+		try {
+			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(
+					"SELECT P.post_id, P.username, category_name, title, P.points, P.upload_date, P.post_picture FROM posts P JOIN categories C ON P.category_id = C.category_id JOIN comments com ON com.post_id = P.post_id WHERE com.username = ? ;");
+			st.setString(1, username);
+			ResultSet resultSet = st.executeQuery();
+			while (resultSet.next()) {
+				commentedPosts.put(resultSet.getInt("post_id"),
+						new Post(resultSet.getInt("post_id"), resultSet.getString("username"),
+								resultSet.getString("category_name"), resultSet.getString("title"),
+								resultSet.getInt("points"), resultSet.getTimestamp("upload_date").toLocalDateTime(),
+								resultSet.getString("post_picture")));
+			}
+			resultSet.close();
+			st.close();
+		} catch (SQLException e) {
+			System.out.println("Oops, cannot select commented posts of the user.");
+			// e.printStackTrace();
+			return commentedPosts;
+		}
+		System.out.println("Commented posts of user loaded successfully");
+		return commentedPosts;
+	}
+	
+	
+	public Map<Integer, Set<Integer>> getCommentsOfOtherPostsOfUser(String username){
+		Map<Integer, Set<Integer>> commentedPosts = new HashMap<>();
+		try {
+			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(
+					"SELECT c.post_id, c.comment_id FROM posts p JOIN comments c ON p.post_id = c.post_id WHERE p.username != ? ;");
+			st.setString(1, username);
+			ResultSet resultSet = st.executeQuery();
+			while (resultSet.next()) {
+				if(!commentedPosts.containsKey(resultSet.getInt("post_id"))){
+					commentedPosts.put(resultSet.getInt("post_id"),new TreeSet<Integer>());
+				}
+				commentedPosts.get(resultSet.getInt("post_id")).add(resultSet.getInt("comment_id"));
+			}
+			resultSet.close();
+			st.close();
+		} catch (SQLException e) {
+			System.out.println("Oops, cannot select comments of other posts of the user.");
+			// e.printStackTrace();
+			return commentedPosts;
+		}
+		System.out.println("Comments of other posts of user loaded successfully");
+		return commentedPosts;
 	}
 
 	public int addPostToDB(String username, String category, String title, LocalDateTime uploadDate, String picture) {
@@ -174,8 +244,7 @@ public class PostDAO {
 		return postId;
 	}
 
-	
-	public void upvotePostInDB(String username, int postId){
+	public void upvotePostInDB(String username, int postId) {
 		PreparedStatement selectPoints = null;
 		PreparedStatement changePoints = null;
 		PreparedStatement addUpvote = null;
@@ -227,8 +296,8 @@ public class PostDAO {
 			}
 		}
 	}
-	
-	public void downvotePostInDB(String username, int postId){
+
+	public void downvotePostInDB(String username, int postId) {
 		PreparedStatement selectPoints = null;
 		PreparedStatement changePoints = null;
 		PreparedStatement addDownvote = null;
@@ -280,8 +349,8 @@ public class PostDAO {
 			}
 		}
 	}
-	
-	public void reverseUpvoteInDB(String username, int postId){
+
+	public void reverseUpvoteInDB(String username, int postId) {
 		PreparedStatement selectPoints = null;
 		PreparedStatement changePoints = null;
 		PreparedStatement deleteUpvote = null;
@@ -333,8 +402,8 @@ public class PostDAO {
 			}
 		}
 	}
-	
-	public void reverseDownvoteInDB(String username, int postId){
+
+	public void reverseDownvoteInDB(String username, int postId) {
 		PreparedStatement selectPoints = null;
 		PreparedStatement changePoints = null;
 		PreparedStatement deleteDownvote = null;
@@ -386,8 +455,8 @@ public class PostDAO {
 			}
 		}
 	}
-	
-	public void upvoteToDownvteInDB(String username, int postId){
+
+	public void upvoteToDownvteInDB(String username, int postId) {
 		PreparedStatement selectPoints = null;
 		PreparedStatement changePoints = null;
 		PreparedStatement deleteUpvote = null;
@@ -412,7 +481,8 @@ public class PostDAO {
 			deleteUpvote.setInt(1, postId);
 			deleteUpvote.setString(2, username);
 			deleteUpvote.executeUpdate();
-			addDownvote = DBManager.getInstance().getConnection().prepareStatement("INSERT INTO post_downvotes (post_id, username) VALUES (?, ?) ;");
+			addDownvote = DBManager.getInstance().getConnection()
+					.prepareStatement("INSERT INTO post_downvotes (post_id, username) VALUES (?, ?) ;");
 			addDownvote.setInt(1, postId);
 			addDownvote.setString(2, username);
 			addDownvote.executeUpdate();
@@ -447,9 +517,9 @@ public class PostDAO {
 			}
 		}
 	}
-	
-	public void downvoteToUpvoteInDB(String username, int postId){
-		//TODO
+
+	public void downvoteToUpvoteInDB(String username, int postId) {
+		// TODO
 		PreparedStatement selectPoints = null;
 		PreparedStatement changePoints = null;
 		PreparedStatement deleteDownvote = null;
@@ -474,7 +544,8 @@ public class PostDAO {
 			deleteDownvote.setInt(1, postId);
 			deleteDownvote.setString(2, username);
 			deleteDownvote.executeUpdate();
-			addUpvote = DBManager.getInstance().getConnection().prepareStatement("INSERT INTO post_upvotes (post_id, username) VALUES (?, ?) ;");
+			addUpvote = DBManager.getInstance().getConnection()
+					.prepareStatement("INSERT INTO post_upvotes (post_id, username) VALUES (?, ?) ;");
 			addUpvote.setInt(1, postId);
 			addUpvote.setString(2, username);
 			addUpvote.executeUpdate();
@@ -510,6 +581,7 @@ public class PostDAO {
 		}
 	}
 
+	//TODO change method
 	public void deletePostFromDB(int postId) {
 		PreparedStatement deleteComments = null;
 		PreparedStatement deletePost = null;
