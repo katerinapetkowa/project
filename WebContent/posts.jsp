@@ -26,6 +26,7 @@
     <link href="button.css" rel="stylesheet">
     <link href="dropdown.css" rel="stylesheet">
     <link href="LogOutButton.css" rel="stylesheet">
+    <link href="searchBox.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -80,7 +81,7 @@
                         <a href="/MyGag/UploadPost.html"> Upload </a>
                     </li>
                      
-                        <div class="dropdown">
+                       <li> <div class="dropdown">
  							 <button class="dropbtn">Settings</button>
   									<div class="dropdown-content">
 	    								<a href="/MyGag/Profile.jsp">My Profile</a>
@@ -99,8 +100,13 @@
 	   									</form>
 	    						
   									</div>
-						</div> 
-						
+						</div> </li>
+					<li>
+					<form>
+					<input class = " input[type=text] " style = "color: #b4b4b4"  type="text" name="search" placeholder="Search..">
+					</form>
+					</li>	
+					
                     
                 </ul>
                 
