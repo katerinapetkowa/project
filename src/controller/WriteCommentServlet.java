@@ -17,7 +17,7 @@ import model.CommentsManager;
 @WebServlet("/WriteCommentServlet")
 public class WriteCommentServlet extends HttpServlet {
 	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username");
 		String comment = request.getParameter("comment");
 		
@@ -25,7 +25,7 @@ public class WriteCommentServlet extends HttpServlet {
 		String html = "";
 		if(comment!=null){
 			CommentsManager.getInstance().uploadComment(username, postId, comment, 0 , LocalDateTime.now());
-			html="DetailsPostServlet?post_id="+postId;
+			html="CommentsPage.jsp";
 		}
 		RequestDispatcher view = request.getRequestDispatcher(html);
 		view.forward(request, response);
