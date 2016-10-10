@@ -155,8 +155,8 @@ function action2()
   									</div>	
 						</div> </li>
 					<li>
-					<form>
-					<input class = " input[type=text] " style = "color: #b4b4b4"  type="text" name="search" placeholder="Search..">
+					<form action = "SearchServlet" method = "get">
+					<input class = " input[type=text] " style = "color: #b4b4b4"  type="text" name="title" placeholder="Search..">
 					</form>
 					</li>	
                     
@@ -182,7 +182,7 @@ function action2()
                 <!-- Title -->
                 <h1><c:out value="${post.title}"></c:out></h1>
 
-                <hr>
+                
 
                 <!-- Date/Time -->
                 <p><span class="glyphicon glyphicon-time"></span> <c:out value="${post.uploadDate}"></c:out></p>
@@ -205,14 +205,14 @@ function action2()
                 <!-- Comments Form -->
                 <div class="well">
                     <h4>Leave a comment</h4>
-                    <form role  = "form" action = "WriteCommentServlet" method = "get">
+                    <form role  = "form" action = "WriteCommentServlet" method = "post">
                     
                     
                         <div class="form-group">
-                            <textarea class="form-control" name = "comment"> </textarea>
+                            <textarea class="form-control" name = "comment" required></textarea>
                         </div> 
-                        <input id="author" name="post_id" type="hidden" value="<c:out value= "${post.postId}"></c:out>" size="30">
-                        <input id="username" name="username" type="hidden" value="<c:out value="${sessionScope.loggedAs}"></c:out>" size="30">
+                        <input id="author" name="post_id" type="hidden" value="<c:out value= "${post.postId}"></c:out>" size="30" required>
+                        <input id="username" name="username" type="hidden" value="<c:out value="${sessionScope.loggedAs}"></c:out>" size="30" required>
                         <button type="submit" class="btn btn-primary">Submit</button>
                        
                     </form>

@@ -97,8 +97,8 @@
 					</div>
 				</div></li>
 			       <li>
-					<form>
-					<input class = " input[type=text] " style = "color: #b4b4b4"  type="text" name="search" placeholder="Search..">
+					<form action = "SearchServlet" method = "get">
+					<input class = " input[type=text] " style = "color: #b4b4b4"  type="text" name="title" placeholder="Search..">
 					</form>
 					</li>
 
