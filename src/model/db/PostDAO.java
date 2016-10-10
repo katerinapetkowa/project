@@ -191,13 +191,14 @@ public class PostDAO {
 			}
 			changePoints = DBManager.getInstance().getConnection()
 					.prepareStatement("UPDATE posts SET points = ?  WHERE post_id = ? ;");
-			changePoints.setInt(1, points + 1);
+			changePoints.setInt(1, (points + 1));
 			changePoints.setInt(2, postId);
 			changePoints.executeUpdate();
 			addUpvote = DBManager.getInstance().getConnection()
 					.prepareStatement("INSERT INTO post_upvotes (post_id, username) VALUES (?, ?) ;");
 			addUpvote.setInt(1, postId);
 			addUpvote.setString(2, username);
+			addUpvote.executeUpdate();
 			DBManager.getInstance().getConnection().commit();
 			System.out.println("Post upvoted successfully in db");
 		} catch (SQLException e) {
@@ -250,6 +251,7 @@ public class PostDAO {
 					.prepareStatement("INSERT INTO post_downvotes (post_id, username) VALUES (?, ?) ;");
 			addDownvote.setInt(1, postId);
 			addDownvote.setString(2, username);
+			addDownvote.executeUpdate();
 			DBManager.getInstance().getConnection().commit();
 			System.out.println("Post downvoted successfully in db");
 		} catch (SQLException e) {
@@ -271,6 +273,235 @@ public class PostDAO {
 				}
 				if (addDownvote != null) {
 					addDownvote.close();
+				}
+				DBManager.getInstance().getConnection().setAutoCommit(false);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void reverseUpvoteInDB(String username, int postId){
+		PreparedStatement selectPoints = null;
+		PreparedStatement changePoints = null;
+		PreparedStatement deleteUpvote = null;
+		int points = 0;
+		try {
+			DBManager.getInstance().getConnection().setAutoCommit(false);
+			selectPoints = DBManager.getInstance().getConnection()
+					.prepareStatement("SELECT points FROM posts  WHERE post_id = ? ;");
+			selectPoints.setInt(1, postId);
+			ResultSet rs = selectPoints.executeQuery();
+			if (rs.next()) {
+				points = rs.getInt(1);
+			}
+			changePoints = DBManager.getInstance().getConnection()
+					.prepareStatement("UPDATE posts SET points = ?  WHERE post_id = ? ;");
+			changePoints.setInt(1, points - 1);
+			changePoints.setInt(2, postId);
+			changePoints.executeUpdate();
+			deleteUpvote = DBManager.getInstance().getConnection()
+					.prepareStatement("DELETE FROM post_upvotes WHERE post_id = ? AND username = ?");
+			deleteUpvote.setInt(1, postId);
+			deleteUpvote.setString(2, username);
+			deleteUpvote.executeUpdate();
+			DBManager.getInstance().getConnection().commit();
+			System.out.println("Upvote deleted successfully in db");
+		} catch (SQLException e) {
+			try {
+				System.err.print("Transaction is being rolled back, could not reverse upvote of post");
+				DBManager.getInstance().getConnection().rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			System.out.println("Oops .. did not reverse upvote the post in db");
+			e.printStackTrace();
+		} finally {
+			try {
+				if (selectPoints != null) {
+					selectPoints.close();
+				}
+				if (changePoints != null) {
+					changePoints.close();
+				}
+				if (deleteUpvote != null) {
+					deleteUpvote.close();
+				}
+				DBManager.getInstance().getConnection().setAutoCommit(false);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void reverseDownvoteInDB(String username, int postId){
+		PreparedStatement selectPoints = null;
+		PreparedStatement changePoints = null;
+		PreparedStatement deleteDownvote = null;
+		int points = 0;
+		try {
+			DBManager.getInstance().getConnection().setAutoCommit(false);
+			selectPoints = DBManager.getInstance().getConnection()
+					.prepareStatement("SELECT points FROM posts  WHERE post_id = ? ;");
+			selectPoints.setInt(1, postId);
+			ResultSet rs = selectPoints.executeQuery();
+			if (rs.next()) {
+				points = rs.getInt(1);
+			}
+			changePoints = DBManager.getInstance().getConnection()
+					.prepareStatement("UPDATE posts SET points = ?  WHERE post_id = ? ;");
+			changePoints.setInt(1, points + 1);
+			changePoints.setInt(2, postId);
+			changePoints.executeUpdate();
+			deleteDownvote = DBManager.getInstance().getConnection()
+					.prepareStatement("DELETE FROM post_downvotes WHERE post_id = ? AND username = ?");
+			deleteDownvote.setInt(1, postId);
+			deleteDownvote.setString(2, username);
+			deleteDownvote.executeUpdate();
+			DBManager.getInstance().getConnection().commit();
+			System.out.println("Downvote deleted successfully in db");
+		} catch (SQLException e) {
+			try {
+				System.err.print("Transaction is being rolled back, could not reverse downvote of post");
+				DBManager.getInstance().getConnection().rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			System.out.println("Oops .. did not reverse downvote the post in db");
+			e.printStackTrace();
+		} finally {
+			try {
+				if (selectPoints != null) {
+					selectPoints.close();
+				}
+				if (changePoints != null) {
+					changePoints.close();
+				}
+				if (deleteDownvote != null) {
+					deleteDownvote.close();
+				}
+				DBManager.getInstance().getConnection().setAutoCommit(false);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void upvoteToDownvteInDB(String username, int postId){
+		PreparedStatement selectPoints = null;
+		PreparedStatement changePoints = null;
+		PreparedStatement deleteUpvote = null;
+		PreparedStatement addDownvote = null;
+		int points = 0;
+		try {
+			DBManager.getInstance().getConnection().setAutoCommit(false);
+			selectPoints = DBManager.getInstance().getConnection()
+					.prepareStatement("SELECT points FROM posts  WHERE post_id = ? ;");
+			selectPoints.setInt(1, postId);
+			ResultSet rs = selectPoints.executeQuery();
+			if (rs.next()) {
+				points = rs.getInt(1);
+			}
+			changePoints = DBManager.getInstance().getConnection()
+					.prepareStatement("UPDATE posts SET points = ?  WHERE post_id = ? ;");
+			changePoints.setInt(1, points - 2);
+			changePoints.setInt(2, postId);
+			changePoints.executeUpdate();
+			deleteUpvote = DBManager.getInstance().getConnection()
+					.prepareStatement("DELETE FROM post_upvotes WHERE post_id = ? AND username = ?");
+			deleteUpvote.setInt(1, postId);
+			deleteUpvote.setString(2, username);
+			deleteUpvote.executeUpdate();
+			addDownvote = DBManager.getInstance().getConnection().prepareStatement("INSERT INTO post_downvotes (post_id, username) VALUES (?, ?) ;");
+			addDownvote.setInt(1, postId);
+			addDownvote.setString(2, username);
+			addDownvote.executeUpdate();
+			DBManager.getInstance().getConnection().commit();
+			System.out.println("Downvote deleted successfully in db");
+		} catch (SQLException e) {
+			try {
+				System.err.print("Transaction is being rolled back, could not reverse downvote of post");
+				DBManager.getInstance().getConnection().rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			System.out.println("Oops .. did not reverse downvote the post in db");
+			e.printStackTrace();
+		} finally {
+			try {
+				if (selectPoints != null) {
+					selectPoints.close();
+				}
+				if (changePoints != null) {
+					changePoints.close();
+				}
+				if (deleteUpvote != null) {
+					deleteUpvote.close();
+				}
+				if (addDownvote != null) {
+					addDownvote.close();
+				}
+				DBManager.getInstance().getConnection().setAutoCommit(false);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void downvoteToUpvoteInDB(String username, int postId){
+		//TODO
+		PreparedStatement selectPoints = null;
+		PreparedStatement changePoints = null;
+		PreparedStatement deleteDownvote = null;
+		PreparedStatement addUpvote = null;
+		int points = 0;
+		try {
+			DBManager.getInstance().getConnection().setAutoCommit(false);
+			selectPoints = DBManager.getInstance().getConnection()
+					.prepareStatement("SELECT points FROM posts  WHERE post_id = ? ;");
+			selectPoints.setInt(1, postId);
+			ResultSet rs = selectPoints.executeQuery();
+			if (rs.next()) {
+				points = rs.getInt(1);
+			}
+			changePoints = DBManager.getInstance().getConnection()
+					.prepareStatement("UPDATE posts SET points = ?  WHERE post_id = ? ;");
+			changePoints.setInt(1, points - 2);
+			changePoints.setInt(2, postId);
+			changePoints.executeUpdate();
+			deleteDownvote = DBManager.getInstance().getConnection()
+					.prepareStatement("DELETE FROM post_downvotes WHERE post_id = ? AND username = ?");
+			deleteDownvote.setInt(1, postId);
+			deleteDownvote.setString(2, username);
+			deleteDownvote.executeUpdate();
+			addUpvote = DBManager.getInstance().getConnection().prepareStatement("INSERT INTO post_upvotes (post_id, username) VALUES (?, ?) ;");
+			addUpvote.setInt(1, postId);
+			addUpvote.setString(2, username);
+			addUpvote.executeUpdate();
+			DBManager.getInstance().getConnection().commit();
+			System.out.println("Downvote deleted successfully in db");
+		} catch (SQLException e) {
+			try {
+				System.err.print("Transaction is being rolled back, could not reverse downvote of post");
+				DBManager.getInstance().getConnection().rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			System.out.println("Oops .. did not reverse downvote the post in db");
+			e.printStackTrace();
+		} finally {
+			try {
+				if (selectPoints != null) {
+					selectPoints.close();
+				}
+				if (changePoints != null) {
+					changePoints.close();
+				}
+				if (deleteDownvote != null) {
+					deleteDownvote.close();
+				}
+				if (addUpvote != null) {
+					addUpvote.close();
 				}
 				DBManager.getInstance().getConnection().setAutoCommit(false);
 			} catch (SQLException e) {

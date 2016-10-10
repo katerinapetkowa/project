@@ -82,6 +82,7 @@ public class UserDAO {
 			// st.executeUpdate("UPDATE users SET name = '" + name + "' WHERE
 			// username = '" + username + "';");
 			// st.close();
+			ps.executeUpdate();
 			System.out.println("Name changed successfully in db");
 		} catch (SQLException e) {
 			System.out.println("Oops .. did not change the name of the user");

@@ -43,7 +43,7 @@ public class CommentsManager {
 			return commentsOfPost;
 		}
 		commentsOfPost.putAll(CommentsManager.getInstance().getCommentsByPosts().get(postId));
-		System.out.println(commentsByPosts.get(postId).size());
+		//System.out.println(commentsByPosts.get(postId).size());
 		//return commentsOfPost;
 		return commentsByPosts.get(postId);
 	}
@@ -60,6 +60,8 @@ public class CommentsManager {
 		return comments;
 	}
 	
+	//TODO add commented post to collection of user's commented posts
+	
 	public void uploadComment(String username, int postId, String text, int points, LocalDateTime uploadDate){
 		int commentId = CommentDAO.getInstance().addCommentToDB(username, postId, text, points, uploadDate);
 		Comment comment = new Comment(commentId, username, postId, text, points, uploadDate);
@@ -68,7 +70,7 @@ public class CommentsManager {
 			CommentsManager.getInstance().commentsByPosts.put(postId, new HashMap<Integer, Comment>());
 			System.out.println("adding post id to collection of comments by posts");
 		}
-		System.out.println(commentsByPosts.get(postId).size());
+		//System.out.println(commentsByPosts.get(postId).size());
 		CommentsManager.getInstance().commentsByPosts.get(postId).put(commentId, comment);
 		System.out.println("adding comment by id to collection by post ids");
 		UsersManager.getInstance().getUser(username).addCommentToUser(postId, commentId);

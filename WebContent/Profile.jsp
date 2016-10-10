@@ -63,7 +63,7 @@
 					class="icon-bar"></span>
 			</button>
 			<a href="posts.jsp"> <img src="9gag-logo.png" alt="MyGag"
-				width="60" height="60">
+				width="55" height="55">
 			</a>
 
 		</div>
