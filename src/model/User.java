@@ -16,6 +16,7 @@ public class User {
 	private String password;
 	private String email;
 	private String profilePicture;
+	private String description;
 
 	private ConcurrentHashMap<Integer, Post> posts; // post id -> post
 
@@ -25,7 +26,7 @@ public class User {
 	private ConcurrentSkipListSet<Integer> downvotes;
 	
 
-	public User(String username, String name, String password, String email, String profilePicture,
+	public User(String username, String name, String password, String email, String profilePicture, String description,
 			ConcurrentHashMap<Integer, Post> posts, ConcurrentHashMap<Integer, Post> upvotedPosts, 
 			ConcurrentHashMap<Integer, Post> commentedPosts, ConcurrentHashMap<Integer, Set<Integer>> comments,
 			ConcurrentSkipListSet<Integer> downvotes) {
@@ -34,6 +35,7 @@ public class User {
 		this.password = password;
 		this.email = email;
 		this.profilePicture = profilePicture;
+		this.description = description;
 		this.posts = new ConcurrentHashMap<>();
 		this.posts.putAll(posts);
 		this.upvotedPosts = new ConcurrentHashMap<>();
@@ -85,6 +87,10 @@ public class User {
 	public String getProfilePicture() {
 		return profilePicture;
 	}
+	
+	public String getDescription() {
+		return description;
+	}
 
 	public void setName(String name) {
 		this.name = name;
@@ -100,6 +106,10 @@ public class User {
 
 	public void setProfilePicture(String profilePicture) {
 		this.profilePicture = profilePicture;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Map<Integer, Post> getPosts() {

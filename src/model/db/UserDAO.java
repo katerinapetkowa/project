@@ -31,7 +31,7 @@ public class UserDAO {
 		try {
 			Statement st = DBManager.getInstance().getConnection().createStatement();
 			ResultSet resultSet = st
-					.executeQuery("SELECT username, name, password, email, profile_picture FROM users;");
+					.executeQuery("SELECT username, name, password, email, profile_picture, description FROM users;");
 			while (resultSet.next()) {
 				String username = resultSet.getString("username");
 				ConcurrentHashMap<Integer, Post> posts = new ConcurrentHashMap<>();
@@ -46,7 +46,7 @@ public class UserDAO {
 				comments.putAll(PostDAO.getInstance().getCommentsOfOtherPostsOfUser(username));
 				users.add(new User(resultSet.getString("username"),
 						resultSet.getString("name"), resultSet.getString("password"), resultSet.getString("email"),
-						resultSet.getString("profile_picture"), posts, upvotedPosts, commentedPosts, comments, downvotedPosts));
+						resultSet.getString("profile_picture"), resultSet.getString("description"), posts, upvotedPosts, commentedPosts, comments, downvotedPosts));
 			}
 			resultSet.close();
 			st.close();
@@ -61,12 +61,13 @@ public class UserDAO {
 	public void addUserToDB(String username, String name, String password, String email, String profilePicture) {
 		try {
 			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(
-					"INSERT INTO users (username, name, password, email, profile_picture) VALUES (?, ?, ?, ?, ?);");
+					"INSERT INTO users (username, name, password, email, profile_picture, description) VALUES (?, ?, ?, ?, ?, ?);");
 			st.setString(1, username);
 			st.setString(2, name);
 			st.setString(3, password);
 			st.setString(4, email);
 			st.setString(5, profilePicture);
+			st.setString(6, "My Funny Collection");
 			st.executeUpdate();
 //			ResultSet rs = st.getGeneratedKeys();
 //			if (rs.next()) {
@@ -81,64 +82,107 @@ public class UserDAO {
 		}
 	}
 
-	public void changeNameInDB(String username, String name) {
-		try {
-			PreparedStatement ps = DBManager.getInstance().getConnection()
-					.prepareStatement("UPDATE users SET name = ? WHERE username = ?;");
-			ps.setString(1, name);
-			ps.setString(2, username);
-			// Statement st =
-			// DBManager.getInstance().getConnection().createStatement();
-			// st.executeUpdate("UPDATE users SET name = '" + name + "' WHERE
-			// username = '" + username + "';");
-			// st.close();
-			ps.executeUpdate();
-			System.out.println("Name changed successfully in db");
-		} catch (SQLException e) {
-			System.out.println("Oops .. did not change the name of the user");
-			e.printStackTrace();
-		}
-	}
+//	public void changeNameInDB(String username, String name) {
+//		try {
+//			PreparedStatement ps = DBManager.getInstance().getConnection()
+//					.prepareStatement("UPDATE users SET name = ? WHERE username = ?;");
+//			ps.setString(1, name);
+//			ps.setString(2, username);
+//			// Statement st =
+//			// DBManager.getInstance().getConnection().createStatement();
+//			// st.executeUpdate("UPDATE users SET name = '" + name + "' WHERE
+//			// username = '" + username + "';");
+//			// st.close();
+//			ps.executeUpdate();
+//			System.out.println("Name changed successfully in db");
+//		} catch (SQLException e) {
+//			System.out.println("Oops .. did not change the name of the user");
+//			e.printStackTrace();
+//		}
+//	}
 
 	public void changePasswordInDB(String username, String password) {
+		PreparedStatement changePassword = null;
 		try {
-
-			Statement st = DBManager.getInstance().getConnection().createStatement();
-			st.executeUpdate("UPDATE users SET password = '" + password + "' WHERE username = '" + username + "';");
-			st.close();
+			changePassword = DBManager.getInstance().getConnection().
+					prepareStatement("UPDATE users SET password = ? WHERE username = ?;");
+			changePassword.setString(1, password);
+			changePassword.setString(2, username);
+			changePassword.executeUpdate();
 			System.out.println("Password changed successfully in db");
 		} catch (SQLException e) {
 			System.out.println("Oops .. did not change the password of the user");
 			e.printStackTrace();
+		}finally {
+			try {
+				if (changePassword != null) {
+					changePassword.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-	public void changeEmailInDB(String username, String email) {
-		try {
-			Statement st = DBManager.getInstance().getConnection().createStatement();
-			st.executeUpdate("UPDATE users SET email = '" + email + "' WHERE username = '" + username + "';");
-			st.close();
-			System.out.println("Email changed succesfully in db");
-		} catch (SQLException e) {
-			System.out.println("Oops .. did not change the email of the user");
-			e.printStackTrace();
-		}
-	}
+//	public void changeEmailInDB(String username, String email) {
+//		try {
+//			Statement st = DBManager.getInstance().getConnection().createStatement();
+//			st.executeUpdate("UPDATE users SET email = '" + email + "' WHERE username = '" + username + "';");
+//			st.close();
+//			System.out.println("Email changed succesfully in db");
+//		} catch (SQLException e) {
+//			System.out.println("Oops .. did not change the email of the user");
+//			e.printStackTrace();
+//		}
+//	}
 
 	public void changeProfilePictureInDB(String username, String profilePicture) {
+		PreparedStatement changeProfilePicture = null;
 		try {
-			Statement st = DBManager.getInstance().getConnection().createStatement();
-			st.executeUpdate(
-					"UPDATE users SET profile_picture = '" + profilePicture + "' WHERE username = '" + username + "';");
-			st.close();
-			System.out.println("Email changed succesfully in db");
+			changeProfilePicture = DBManager.getInstance().getConnection().
+					prepareStatement("UPDATE users SET profile_picture = ? WHERE username = ?;");
+			changeProfilePicture.setString(1, profilePicture);
+			changeProfilePicture.setString(2, username);
+			System.out.println("Profile picture changed succesfully in db");
 		} catch (SQLException e) {
 			System.out.println("Oops .. did not change the profile picture of the user");
 			e.printStackTrace();
+		}finally {
+			try {
+				if (changeProfilePicture != null) {
+					changeProfilePicture.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void changeProfileInDB(String username, String name, String email, String description){
+		PreparedStatement changeProfile = null;
+		try {
+			changeProfile = DBManager.getInstance().getConnection().
+					prepareStatement("UPDATE users SET name = ?, email = ?, description = ? WHERE username = ?;");
+			changeProfile.setString(1, name);
+			changeProfile.setString(2, email);
+			changeProfile.setString(3, description);
+			changeProfile.setString(4, username);
+			changeProfile.executeUpdate();
+			System.out.println("Profile changed succesfully in db");
+		} catch (SQLException e) {
+			System.out.println("Oops .. did not change profile");
+			e.printStackTrace();
+		}finally {
+			try {
+				if (changeProfile != null) {
+					changeProfile.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-	//TODO change method
 	public void deleteUserFromDB(String username) {
 		PreparedStatement deleteUpvotesOfUser = null;
 		PreparedStatement deleteDownvotesOfUser = null;

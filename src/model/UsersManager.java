@@ -44,19 +44,19 @@ public class UsersManager {
 
 	public void registerUser(String username, String name, String password, String email, String profilePicture) {
 		UserDAO.getInstance().addUserToDB(username, name, password, email, profilePicture);
-		User user = new User(username, name, password, email, profilePicture, new ConcurrentHashMap<Integer, Post>(),
+		User user = new User(username, name, password, email, profilePicture, "My Funny Collection", new ConcurrentHashMap<Integer, Post>(),
 				new ConcurrentHashMap<Integer, Post>(), new ConcurrentHashMap<Integer, Post>(),
 				new ConcurrentHashMap<Integer, Set<Integer>>(), new ConcurrentSkipListSet<Integer>());
 		registerredUsers.put(username, user);
 		System.out.println("User added successfully to collection of all users");
 	}
 
-	public void changeName(String username, String name) {
-		UserDAO.getInstance().changeNameInDB(username, name);
-		User user = registerredUsers.get(username);
-		user.setName(name);
-		System.out.println("Name changed successfully in collection");
-	}
+//	public void changeName(String username, String name) {
+//		UserDAO.getInstance().changeNameInDB(username, name);
+//		User user = registerredUsers.get(username);
+//		user.setName(name);
+//		System.out.println("Name changed successfully in collection");
+//	}
 
 	public void changePassword(String username, String password) {
 		UserDAO.getInstance().changePasswordInDB(username, password);
@@ -65,19 +65,28 @@ public class UsersManager {
 		System.out.println("Password changed successfully in collection");
 	}
 
-	public void changeEmail(String username, String email) {
-		UserDAO.getInstance().changeEmailInDB(username, email);
-		User user = registerredUsers.get(username);
-		user.setEmail(email);
-		;
-		System.out.println("Email changed successfully in collection");
-	}
+//	public void changeEmail(String username, String email) {
+//		UserDAO.getInstance().changeEmailInDB(username, email);
+//		User user = registerredUsers.get(username);
+//		user.setEmail(email);
+//		;
+//		System.out.println("Email changed successfully in collection");
+//	}
 
 	public void changeProfilePicture(String username, String profilePicture) {
 		UserDAO.getInstance().changeProfilePictureInDB(username, profilePicture);
 		User user = registerredUsers.get(username);
 		user.setProfilePicture(profilePicture);
 		System.out.println("Profile picture changed successfully in collection");
+	}
+	
+	public void changeProfile(String username, String name, String email, String description){
+		UserDAO.getInstance().changeProfileInDB(username, name, email, description);;
+		User user = registerredUsers.get(username);
+		user.setName(name);
+		user.setEmail(email);
+		user.setDescription(description);
+		System.out.println("Profile changed successfully in collection");
 	}
 
 	public Map<String, User> getAllUsers() {

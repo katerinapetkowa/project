@@ -34,38 +34,36 @@
 				enctype="multipart/form-data">
 
 				<h1>Change profile</h1>
-
+					<small style="color: white"><b>Avatar</b> </small>
+					<br>
+				<img class="img-responsive"
+					src="PictureServlet?username=${UsersManager.getInstance().getUser(sessionScope.loggedAs).getUsername()}" alt="" width="100">
+				<br>	
+				<div class="field-wrap">
+					<input type="file" name="profilePicture" accept="image/*" 
+						autocomplete="off" />
+				</div>
 
 
 				<div class="field-wrap">
+				<small style="color: white"><b>Name</b> </small>
 					<input type="text" name="name" maxlength="50"
 						value="${UsersManager.getInstance().getUser(sessionScope.loggedAs).getName()}"
 						required autocomplete="off" />
-					<small style="color: white"><b>Name</b> </small>
 				</div>
 
 				<div class="field-wrap">
+				<small style="color: white"><b> Email </b></small>
 					<input type="email" name="email" maxlength="40"
 						value="${UsersManager.getInstance().getUser(sessionScope.loggedAs).getEmail()}"
 						required autocomplete="off" />
-						<small style="color: white"><b> Email </b></small>
 				</div>
 
+				
 				<div class="field-wrap">
-					<label> Password<span class="req">*</span>
-					</label> <input type="password" name="password" id="password" maxlength="30" required autocomplete="off" />
-				</div>
-
-
-				<div class="field-wrap">
-					<label> Confirm Password<span class="req">*</span>
-					</label> <input type="password" name="password2" id="confirm_password" maxlength="30" required
-						autocomplete="off" />
-				</div>
-
-				<div class="field-wrap">
-					<input type="file" name="profilePicture" accept="image/*" required
-						autocomplete="off" />
+				<small style="color: white"><b> Tell people who you are </b></small>
+					<textarea style="height: 100px" name="description" id="description" maxlength="120"
+					 required autocomplete="off"> ${UsersManager.getInstance().getUser(sessionScope.loggedAs).getDescription()} </textarea>
 				</div>
 
 				<button class="button button-block" type="submit">Save
