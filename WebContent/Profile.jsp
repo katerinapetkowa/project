@@ -125,7 +125,7 @@
 				<img class="img-responsive"
 					src="PictureServlet?username=${UsersManager.getInstance().getUser(sessionScope.loggedAs).getUsername()}" alt="" width="100">
 				<button class="dropbtnlog" type = "submit" onclick="window.location.href='/MyGag/ChangeSettings.jsp'">Change profile</button> </p>
-				<a style = "text-decoration: none"href = "deletePage.html"> Delete account</a>
+				<a style = "text-decoration: none"href = "deletePage.jsp"> Delete account</a>
 				<hr>
 				
 			

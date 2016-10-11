@@ -133,8 +133,8 @@
                <h4>Search results for "<c:out value="${requestScope.title}"></c:out>"</h4>
 				<c:forEach var = "post" items='${PostsManager.getInstance().searchPosts(requestScope.title).values()}'>
                 <!-- First Blog Post -->
-                
-                
+                <c:choose>
+                	<c:when test="">
                 <h2>
                     <a style = "text-decoration: none; color:#222222" onmouseover="this.style.color = '#23527c'" onmouseout="this.style.color = '#222222'" href="DetailsPostServlet?post_id=<c:out value="${post.postId}"></c:out>"> <c:out value="${post.title}"></c:out></a>
                 </h2>
@@ -143,6 +143,8 @@
                 <hr>
                 <a href="DetailsPostServlet?post_id=<c:out value="${post.postId}"></c:out>"><img class="img-responsive" src="PostServlet?post_id=<c:out value="${post.postId}"></c:out>" alt="" width = "500"></a>
                 <hr>
+                </c:when>
+                </c:choose>
                </c:forEach>
 				
 				

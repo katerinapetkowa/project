@@ -1,7 +1,13 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="model.PostsManager" %>
+<%@ page import="model.Post" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta charset="UTF-8">
+
 <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -74,7 +80,7 @@
                 
                 
                 <form action = "DeleteServlet" method = "post">
-                
+                <input id="username" name="username" type="hidden" value="<c:out value="${sessionScope.loggedAs}"></c:out>" size="30" required>
                 <button style = "background:none!important; border:none; padding:0!important;font: inherit;border-bottom:none;cursor: pointer" onmouseover="this.style.color = '#23527c'" onmouseout="this.style.color = '#222222'"> I want to delete my account.</button>
                 </form>
                 </div>
