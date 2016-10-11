@@ -107,13 +107,24 @@ public class UsersManager {
 		return null;
 	}
 
-	//TODO change method
 	public void deleteUser(String username) {
-		// TODO delete comments of user from collections?, delete upvotes and downvotes
-		
-		
-		UsersManager.getInstance().registerredUsers.remove(username);
-		UserDAO.getInstance().deleteUserFromDB(username);
+		User user = UsersManager.getInstance().getUser(username);
+		for(int postId : user.getComments().keySet()){  //deleting user's comments from other user's posts
+			for(int commentId : user.getComments().get(postId)){
+				CommentsManager.getInstance().removeCommentFromAllComments(postId, commentId);
+			}
+		}
+		for(int postId : user.getPosts().keySet()){  //removing user's posts from collections, removing posts' comments and votes
+			PostsManager.getInstance().removePostFromCollections(postId);
+		}
+		for(int postId : user.getUpvotedPosts().keySet()){ //removing upvotes from collection of upvotes
+			PostsManager.getInstance().removeUpvoteFromCollection(postId, username);
+		}
+		for(int postId : user.getDownvotes()){ //removing downvotes from collection of downvotes
+			PostsManager.getInstance().removeDownvoteFromCollection(postId, username);
+		}
+		UsersManager.getInstance().registerredUsers.remove(username); //removing user from collection of users
+		UserDAO.getInstance().deleteUserFromDB(username); //removing user from db
 	}
 
 }

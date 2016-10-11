@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
@@ -112,11 +113,16 @@ public class User {
 	public Map<Integer, Post> getCommentedPosts() {
 		return Collections.unmodifiableMap(commentedPosts);
 	}
+	
+	public Set<Integer> getDownvotes() {
+		return Collections.unmodifiableSet(downvotes);
+	}
 
-	public void addCommentToUser(int postId, int commentId) {
-		if (!this.posts.containsKey(postId)) {
-			if (!this.comments.containsKey(postId)) {
-				this.comments.put(postId, new HashSet<Integer>());
+	public void addCommentToUser(int postId, int commentId, Post post) {
+		this.commentedPosts.put(postId, post);
+		if(!post.getUsername().equals(this.getUsername())){
+			if(this.comments.containsKey(postId)){
+				this.comments.put(postId, new TreeSet<Integer>());
 			}
 			this.comments.get(postId).add(commentId);
 		}
@@ -152,10 +158,6 @@ public class User {
 	
 	public void removeDownvoteOfPost(int postId){
 		this.downvotes.remove(postId);
-	}
-	
-	public void commentPost(int postId, Post post){
-		this.commentedPosts.put(postId, post);
 	}
 	
 	public void removeCommentedPost(int postId){

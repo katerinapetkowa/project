@@ -107,14 +107,7 @@ public class CommentDAO {
 		return commentId;
 	}
 	
-	
-	public void getCommentsOfUserFromDB(String username){
-		//TODO get all comments of user of other user's posts
-	}
-	
-	
 
-	//TODO change method
 	public void deleteCommentFromDB(int commentId) {
 		try {
 			PreparedStatement st = DBManager.getInstance().getConnection()

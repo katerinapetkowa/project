@@ -145,12 +145,12 @@ public class PostDAO {
 		System.out.println("Upvoted posts of user loaded successfully");
 		return likedPosts;
 	}
-	
-	public Set<Integer> getPostDownvotesByUser(String username){
+
+	public Set<Integer> getPostDownvotesByUser(String username) {
 		Set<Integer> downvotedPosts = new ConcurrentSkipListSet<>();
 		try {
-			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(
-					"SELECT post_id FROM post_downvotes WHERE username = ? ;");
+			PreparedStatement st = DBManager.getInstance().getConnection()
+					.prepareStatement("SELECT post_id FROM post_downvotes WHERE username = ? ;");
 			st.setString(1, username);
 			ResultSet resultSet = st.executeQuery();
 			while (resultSet.next()) {
@@ -191,9 +191,8 @@ public class PostDAO {
 		System.out.println("Commented posts of user loaded successfully");
 		return commentedPosts;
 	}
-	
-	
-	public Map<Integer, Set<Integer>> getCommentsOfOtherPostsOfUser(String username){
+
+	public Map<Integer, Set<Integer>> getCommentsOfOtherPostsOfUser(String username) {
 		Map<Integer, Set<Integer>> commentedPosts = new HashMap<>();
 		try {
 			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(
@@ -201,8 +200,8 @@ public class PostDAO {
 			st.setString(1, username);
 			ResultSet resultSet = st.executeQuery();
 			while (resultSet.next()) {
-				if(!commentedPosts.containsKey(resultSet.getInt("post_id"))){
-					commentedPosts.put(resultSet.getInt("post_id"),new TreeSet<Integer>());
+				if (!commentedPosts.containsKey(resultSet.getInt("post_id"))) {
+					commentedPosts.put(resultSet.getInt("post_id"), new TreeSet<Integer>());
 				}
 				commentedPosts.get(resultSet.getInt("post_id")).add(resultSet.getInt("comment_id"));
 			}
@@ -519,7 +518,6 @@ public class PostDAO {
 	}
 
 	public void downvoteToUpvoteInDB(String username, int postId) {
-		// TODO
 		PreparedStatement selectPoints = null;
 		PreparedStatement changePoints = null;
 		PreparedStatement deleteDownvote = null;
@@ -581,16 +579,29 @@ public class PostDAO {
 		}
 	}
 
-	//TODO change method
 	public void deletePostFromDB(int postId) {
 		PreparedStatement deleteComments = null;
 		PreparedStatement deletePost = null;
+		PreparedStatement deleteUpvotes = null;
+		PreparedStatement deleteDownvotes = null;
 		try {
 			DBManager.getInstance().getConnection().setAutoCommit(false);
+			// delete comments of post
 			deleteComments = DBManager.getInstance().getConnection()
 					.prepareStatement("DELETE FROM comments  WHERE post_id = ? ;");
 			deleteComments.setInt(1, postId);
 			deleteComments.executeUpdate();
+			// delete upvotes of post
+			deleteUpvotes = DBManager.getInstance().getConnection()
+					.prepareStatement("DELETE FROM post_upvotes WHERE post_id = ? ;");
+			deleteUpvotes.setInt(1, postId);
+			deleteUpvotes.executeUpdate();
+			// delete downvotes of post
+			deleteDownvotes = DBManager.getInstance().getConnection()
+					.prepareStatement("DELETE FROM post_downvotes WHERE post_id = ? ");
+			deleteDownvotes.setInt(1, postId);
+			deleteDownvotes.executeUpdate();
+			// delete post
 			deletePost = DBManager.getInstance().getConnection()
 					.prepareStatement("DELETE FROM posts  WHERE post_id = ? ;");
 			deletePost.setInt(1, postId);

@@ -112,7 +112,6 @@ public class PostsManager {
 	}
 	
 	
-	//TODO add upvoted posts into user's collection of liked posts
 
 	public void upVotePost(String username, int postId) {
 		if (!PostsManager.getInstance().postUpvotes.containsKey(postId)) {
@@ -200,17 +199,33 @@ public class PostsManager {
 		return posts;
 	}
 
-	//TODO change method
 	public void deletePost(int postId) {
 		for (Comment c : CommentsManager.getInstance().getCommentsOfPost(postId).values()) {
 			UsersManager.getInstance().getUser(c.getUsername()).deleteCommentFromUser(postId, c.getCommentId());
+			UsersManager.getInstance().getUser(c.getUsername()).removeCommentedPost(postId);
 		}
-		
 		CommentsManager.getInstance().deleteAllCommentsOfPost(postId);
 		PostsManager.getInstance().allPosts.remove(postId);
 		String postCategory = PostsManager.getInstance().getPost(postId).getCategory();
 		PostsManager.getInstance().postsByCategories.get(postCategory).remove(postId);
+		for(String username : PostsManager.getInstance().postUpvotes.get(postId)){
+			UsersManager.getInstance().getUser(username).removeUpvoteOfPost(postId);
+		}
+		for(String username : PostsManager.getInstance().postDownvotes.get(postId)){
+			UsersManager.getInstance().getUser(username).removeDownvoteOfPost(postId);
+		}
 		PostDAO.getInstance().deletePostFromDB(postId);
+	}
+	
+	public void removePostFromCollections(int postId){
+		for (Comment c : CommentsManager.getInstance().getCommentsOfPost(postId).values()) {
+			UsersManager.getInstance().getUser(c.getUsername()).deleteCommentFromUser(postId, c.getCommentId());
+			UsersManager.getInstance().getUser(c.getUsername()).removeCommentedPost(postId);
+		}
+		CommentsManager.getInstance().deleteAllCommentsOfPost(postId);
+		PostsManager.getInstance().allPosts.remove(postId);
+		String postCategory = PostsManager.getInstance().getPost(postId).getCategory(); 
+		PostsManager.getInstance().postsByCategories.get(postCategory).remove(postId);
 		for(String username : PostsManager.getInstance().postUpvotes.get(postId)){
 			UsersManager.getInstance().getUser(username).removeUpvoteOfPost(postId);
 		}
@@ -218,5 +233,13 @@ public class PostsManager {
 			UsersManager.getInstance().getUser(username).removeDownvoteOfPost(postId);
 		}
 	}
+	
+	public void removeUpvoteFromCollection(int postId, String username){
+		PostsManager.getInstance().postUpvotes.get(postId).remove(username);
+	}
 
+	public void removeDownvoteFromCollection(int postId, String username){
+		PostsManager.getInstance().postDownvotes.get(postId).remove(username);
+	}
+	
 }

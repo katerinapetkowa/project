@@ -140,12 +140,22 @@ public class UserDAO {
 
 	//TODO change method
 	public void deleteUserFromDB(String username) {
+		PreparedStatement deleteUpvotesOfUser = null;
+		PreparedStatement deleteDownvotesOfUser = null;
 		PreparedStatement deleteCommentsOfUser = null;
 		PreparedStatement deleteCommentsOfPost = null;
 		PreparedStatement deletePosts = null;
 		PreparedStatement deleteUser = null;
 		try {
 			DBManager.getInstance().getConnection().setAutoCommit(false);
+			deleteUpvotesOfUser = DBManager.getInstance().getConnection().
+					prepareStatement("DELETE FROM post_upvotes WHERE username = ? ;");
+			deleteUpvotesOfUser.setString(1, username);
+			deleteUpvotesOfUser.executeUpdate();
+			deleteDownvotesOfUser = DBManager.getInstance().getConnection()
+					.prepareStatement("DELETE FROM post_downvotes WHERE username = ? ;");
+			deleteDownvotesOfUser.setString(1, username);
+			deleteDownvotesOfUser.executeUpdate();
 			deleteCommentsOfUser = DBManager.getInstance().getConnection()
 					.prepareStatement("DELETE FROM comments  WHERE username = ? ;");
 			deleteCommentsOfUser.setString(1, username);
