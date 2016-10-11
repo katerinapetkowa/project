@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import model.db.CommentDAO;
@@ -11,14 +12,14 @@ import model.db.CommentDAO;
 public class CommentsManager {
 	
 	private static CommentsManager instance;
-	private ConcurrentHashMap<Integer, HashMap<Integer, Comment>> commentsByPosts; //post id -> comment id -> comment 
+	private ConcurrentHashMap<Integer, TreeMap<Integer, Comment>> commentsByPosts; //post id -> comment id -> comment 
 	//nqkuv set ot users koito sa haresali i ne ?? ili vseki comment da si gi pazi
 	
 	public CommentsManager() {
 		commentsByPosts = new ConcurrentHashMap<>();
 		for (Comment c : CommentDAO.getInstance().getAllCommentsFromDB()) {
 			if(!commentsByPosts.containsKey(c.getPostId())){
-				commentsByPosts.put(c.getPostId(), new HashMap<Integer, Comment>());
+				commentsByPosts.put(c.getPostId(), new TreeMap<Integer, Comment>());
 			}
 			commentsByPosts.get(c.getPostId()).put(c.getCommentId(), c);
 		}
@@ -32,20 +33,18 @@ public class CommentsManager {
 		return instance;
 	}
 	
-	public Map<Integer, HashMap<Integer, Comment>> getCommentsByPosts() {
+	public Map<Integer, TreeMap<Integer, Comment>> getCommentsByPosts() {
 		return Collections.unmodifiableMap(commentsByPosts);
 		
 	}
 	
-	public HashMap<Integer,Comment> getCommentsOfPost(int postId){
-		HashMap<Integer,Comment> commentsOfPost = new HashMap<>();
+	public Map<Integer,Comment> getCommentsOfPost(int postId){
+		Map<Integer,Comment> commentsOfPost = new TreeMap<>(Collections.reverseOrder());
 		if(!CommentsManager.getInstance().getCommentsByPosts().containsKey(postId)){
 			return commentsOfPost;
 		}
 		commentsOfPost.putAll(CommentsManager.getInstance().getCommentsByPosts().get(postId));
-		//System.out.println(commentsByPosts.get(postId).size());
-		//return commentsOfPost;
-		return commentsByPosts.get(postId);
+		return commentsOfPost;
 	}
 	
 	public Comment getComment(int postId, int commentId){
@@ -66,7 +65,7 @@ public class CommentsManager {
 		Comment comment = new Comment(commentId, username, postId, text, points, uploadDate);
 		System.out.println(comment.toString());
 		if(!CommentsManager.getInstance().commentsByPosts.containsKey(postId)){
-			CommentsManager.getInstance().commentsByPosts.put(postId, new HashMap<Integer, Comment>());
+			CommentsManager.getInstance().commentsByPosts.put(postId, new TreeMap<Integer, Comment>());
 			System.out.println("adding post id to collection of comments by posts");
 		}
 		//System.out.println(commentsByPosts.get(postId).size());

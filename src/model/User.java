@@ -40,6 +40,10 @@ public class User {
 		this.upvotedPosts.putAll(posts);
 		this.commentedPosts = new ConcurrentHashMap<>();
 		this.commentedPosts.putAll(posts);
+		this.comments = new ConcurrentHashMap<>();
+		this.comments.putAll(comments);
+		this.downvotes = new ConcurrentSkipListSet<>();
+		this.downvotes.addAll(downvotes);
 	}
 
 	public Map<Integer, Post> getFreshPosts() {
@@ -121,7 +125,7 @@ public class User {
 	public void addCommentToUser(int postId, int commentId, Post post) {
 		this.commentedPosts.put(postId, post);
 		if(!post.getUsername().equals(this.getUsername())){
-			if(this.comments.containsKey(postId)){
+			if(!this.comments.containsKey(postId)){
 				this.comments.put(postId, new TreeSet<Integer>());
 			}
 			this.comments.get(postId).add(commentId);
