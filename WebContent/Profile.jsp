@@ -120,15 +120,15 @@
 				
 				<h1 class="page-header">My profile</h1>
 				<p>
-				<hr>
+				
 				<h4>${UsersManager.getInstance().getUser(sessionScope.loggedAs).getUsername()}</h4>
 				<img class="img-responsive"
 					src="PictureServlet?username=${UsersManager.getInstance().getUser(sessionScope.loggedAs).getUsername()}" alt="" width="100">
-				<button class="dropbtnlog" type = "submit" onclick="window.location.href='/MyGag/ChangeSettings.jsp'">Change profile</button>
-				
+				<button class="dropbtnlog" type = "submit" onclick="window.location.href='/MyGag/ChangeSettings.jsp'">Change profile</button> </p>
+				<a style = "text-decoration: none"href = "deletePage.html"> Delete account</a>
 				<hr>
-				</p>
 				
+			
 				<c:forEach var='post' items='${UsersManager.getInstance().getUser(sessionScope.loggedAs).getFreshPosts().values()}'>
 				
 				
