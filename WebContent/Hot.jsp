@@ -142,7 +142,7 @@
                     
                 </h1>
                 
-                <c:forEach var = "post" items='${PostsManager.getInstance().getHotPosts().values()}'>
+                <c:forEach var = "post" items='${PostsManager.getInstance().getHotPosts()}'>
 				
                 <!-- First Blog Post -->
                 <h2>

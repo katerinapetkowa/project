@@ -66,7 +66,10 @@ public class Post implements Comparable<Post> {
 
 	@Override
 	public int compareTo(Post p) {
-		return this.uploadDate.compareTo(p.uploadDate);
+		if(this.points == p.points){
+			return -1;
+		}
+		return this.points - p.points;
 	}
 
 

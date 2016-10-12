@@ -5,7 +5,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 import model.db.PostDAO;
@@ -65,10 +67,10 @@ public class PostsManager {
 		return freshPosts;
 	}
 
-	public Map<Integer, Post> getHotPosts() {
-		Map<Integer, Post> hotPosts = new TreeMap<>(Collections.reverseOrder());
+	public Set<Post> getHotPosts() {
+		Set<Post> hotPosts = new TreeSet<>(Collections.reverseOrder());
 		for (Post p : PostsManager.getInstance().getAllPosts().values()) {
-			hotPosts.put(p.getPoints(), p);
+			hotPosts.add(p);
 		}
 		return hotPosts;
 	}
