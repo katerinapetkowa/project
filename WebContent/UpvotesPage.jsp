@@ -159,7 +159,7 @@
                     </li>
                     
                     <li>
-                        <a style="font-size:18px;color:#222222" href="">Upvotes</a>
+                        <a style="border-bottom: solid #b4b4b4;font-size:18px;color:#222222" href="UpvotesPage.jsp">Upvotes</a>
                     </li>
                     <li>
                         <a style="font-size:18px;color:#222222" href="Comments.jsp">Comments</a>

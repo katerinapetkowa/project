@@ -155,7 +155,7 @@
 			id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
 					<li>
-                        <a style="font-size:18px;color:#222222" href="Profile.jsp">Posts</a>
+                        <a style="border-bottom: solid #b4b4b4;font-size:18px;color:#222222" href="Profile.jsp">Posts</a>
                     </li>
                     
                     <li>

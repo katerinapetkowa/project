@@ -32,6 +32,7 @@
     <link href="LogOutButton.css" rel="stylesheet">
     <link href="postDetails.css" rel="stylesheet">
     <link href="searchBox.css" rel="stylesheet">
+    
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -40,8 +41,14 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     
- 
-
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
 <script>
 function byId(e){return document.getElementById(e);}
 
@@ -257,9 +264,22 @@ function action2()
                         <img class="media-object" src="PictureServlet?username=<c:out value="${user.username}"></c:out>" alt="" width="54" height = "54">
                     </a>
                     <div>
+                    <c:choose>
+                     <c:when test="${sessionScope.loggedAs == comment.username}">
+                    <form action = "DeleteCommentServlet" method = "post">
+                <input id="username" name="username" type="hidden" value="<c:out value="${sessionScope.loggedAs}"></c:out>" size="30" required>
+                <input id="author" name="post_id" type="hidden" value="<c:out value= "${post.postId}"></c:out>" size="30" required>
+                <input id="comments" name="comment_id" type="hidden" value="<c:out value= "${comment.commentId}"></c:out>" size="30" required>
+                    <button data-toggle="tooltip" data-placement="top" title="Delete comment" style = "float: right;background:none!important; border:none; padding:0!important;font: inherit;border-bottom:none;cursor: pointer" onmouseover="this.style.color = '#808080'" onmouseout="this.style.color = '#222222'">x</button>
+                     </form>
+                     </c:when>
+                     </c:choose>
+                    
+                    
                         <h4><c:out value="${user.username}"></c:out>
                             <small><c:out value="${comment.uploadDate}"></c:out></small>
                         </h4>
+                        
                         <c:out value="${comment.text}"></c:out>
                     </div>
                 </div>
