@@ -123,6 +123,30 @@ public class PostsManager {
 				.addPost(new Post(postId, username, category, title, 0, uploadDate, picture));
 	}
 
+	public boolean validUpvote(int postId, String username){
+		if(PostsManager.getInstance().getPostUpvotes().containsKey(postId)){
+			if(PostsManager.getInstance().getPostUpvotes().get(postId).contains(username)){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	public boolean validDownvote(int postId, String username){
+		if(PostsManager.getInstance().getPostDownvotes().containsKey(postId)){
+			if(PostsManager.getInstance().getPostDownvotes().get(postId).contains(username)){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		return false;
+	}
+	
 	public void upVotePost(String username, int postId) {
 		if (!PostsManager.getInstance().postUpvotes.containsKey(postId)) {
 			PostsManager.getInstance().postUpvotes.put(postId, new HashSet<String>());

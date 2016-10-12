@@ -199,8 +199,6 @@ function action2()
                 <!-- Title -->
                 <h1><c:out value="${post.title}"></c:out></h1>
 
-                
-
                 <!-- Date/Time -->
                 <p><span class="glyphicon glyphicon-time"></span> <c:out value="${post.uploadDate}"></c:out></p>
 
@@ -218,7 +216,14 @@ function action2()
 				
 				<input id="author" name="post_id" type="hidden" value="<c:out value= "${post.postId}"></c:out>" size="30" required>
 				<input id="username" name="username" type="hidden" value="<c:out value="${sessionScope.loggedAs}"></c:out>" size="30" required>
-				<input type = "image" id ="image" src="heart.png" onclick="action();" alt="Submit" width="38" height="38">
+				<c:choose>
+				<c:when test='${PostsManager.getInstance().validUpvote(post.postId, sessionScope.loggedAs)}'> 
+					<input type = "image" id ="image" src="redheart2.png" onclick="action();" alt="Submit" width="38" height="38">
+				 </c:when> 
+				 <c:otherwise>
+				 <input type = "image" id ="image" src="heart.png" onclick="action();" alt="Submit" width="38" height="38">
+				 </c:otherwise>
+				</c:choose>
 				</form></div>
 				<div style="float: right; width: 5px">
 				<form action = "DislikeServlet" method = "post">
@@ -226,7 +231,16 @@ function action2()
 				<input id="author" name="post_id" type="hidden" value="<c:out value= "${post.postId}"></c:out>" size="30" required>
 				<input id="username" name="username" type="hidden" value="<c:out value="${sessionScope.loggedAs}"></c:out>" size="30" required>
 <%-- 				<a href="DislikeServlet?post_id=<c:out value="${post.postId}"></c:out>"> <input type = "image"  id = "image2" src="dislikebutton.png" onclick="action2();" alt="Submit" width="38" height="38"></a> --%>
-				<input type = "image"  id = "image2" src="dislikebutton.png" onclick="action2();" alt="Submit" width="38" height="38">
+				
+				<c:choose>
+				<c:when test='${PostsManager.getInstance().validDownvote(post.postId, sessionScope.loggedAs)}'> 
+					<input type = "image"  id = "image2" src="reddislike2.png" onclick="action2();" alt="Submit" width="38" height="38">
+				 </c:when> 
+				 <c:otherwise>
+				 <input type = "image"  id = "image2" src="dislikebutton.png" onclick="action2();" alt="Submit" width="38" height="38">
+				</c:otherwise>
+				</c:choose>
+				
 				</form></div>
 				</div>
 				<br>
