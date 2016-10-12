@@ -256,6 +256,7 @@ public class PostDAO {
 			ResultSet rs = selectPoints.executeQuery();
 			if (rs.next()) {
 				points = rs.getInt(1);
+				System.out.println("Points before upvoting - " + points);
 			}
 			changePoints = DBManager.getInstance().getConnection()
 					.prepareStatement("UPDATE posts SET points = ?  WHERE post_id = ? ;");
@@ -309,6 +310,7 @@ public class PostDAO {
 			ResultSet rs = selectPoints.executeQuery();
 			if (rs.next()) {
 				points = rs.getInt(1);
+				System.out.println("Points before downvoting - " + points);
 			}
 			changePoints = DBManager.getInstance().getConnection()
 					.prepareStatement("UPDATE posts SET points = ?  WHERE post_id = ? ;");
@@ -362,6 +364,7 @@ public class PostDAO {
 			ResultSet rs = selectPoints.executeQuery();
 			if (rs.next()) {
 				points = rs.getInt(1);
+				System.out.println("Points before reversing upvote - " + points);
 			}
 			changePoints = DBManager.getInstance().getConnection()
 					.prepareStatement("UPDATE posts SET points = ?  WHERE post_id = ? ;");
@@ -415,6 +418,7 @@ public class PostDAO {
 			ResultSet rs = selectPoints.executeQuery();
 			if (rs.next()) {
 				points = rs.getInt(1);
+				System.out.println("Points before reversing downvote - " + points);
 			}
 			changePoints = DBManager.getInstance().getConnection()
 					.prepareStatement("UPDATE posts SET points = ?  WHERE post_id = ? ;");
@@ -469,6 +473,7 @@ public class PostDAO {
 			ResultSet rs = selectPoints.executeQuery();
 			if (rs.next()) {
 				points = rs.getInt(1);
+				System.out.println("Points before changing from upvot to downvote - " + points);
 			}
 			changePoints = DBManager.getInstance().getConnection()
 					.prepareStatement("UPDATE posts SET points = ?  WHERE post_id = ? ;");
@@ -531,10 +536,11 @@ public class PostDAO {
 			ResultSet rs = selectPoints.executeQuery();
 			if (rs.next()) {
 				points = rs.getInt(1);
+				System.out.println("Points before changing from downvote to upvote - " + points);
 			}
 			changePoints = DBManager.getInstance().getConnection()
 					.prepareStatement("UPDATE posts SET points = ?  WHERE post_id = ? ;");
-			changePoints.setInt(1, points - 2);
+			changePoints.setInt(1, points + 2);
 			changePoints.setInt(2, postId);
 			changePoints.executeUpdate();
 			deleteDownvote = DBManager.getInstance().getConnection()

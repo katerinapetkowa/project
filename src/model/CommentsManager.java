@@ -13,7 +13,6 @@ public class CommentsManager {
 	
 	private static CommentsManager instance;
 	private ConcurrentHashMap<Integer, TreeMap<Integer, Comment>> commentsByPosts; //post id -> comment id -> comment 
-	//nqkuv set ot users koito sa haresali i ne ?? ili vseki comment da si gi pazi
 	
 	public CommentsManager() {
 		commentsByPosts = new ConcurrentHashMap<>();
@@ -75,10 +74,10 @@ public class CommentsManager {
 	}
 
 	public void deleteComment(String username, int postId, int commentId){
+		CommentDAO.getInstance().deleteCommentFromDB(commentId);
 		UsersManager.getInstance().getUser(username).deleteCommentFromUser(postId, commentId);
 		CommentsManager.getInstance().commentsByPosts.get(postId).remove(commentId);
 		UsersManager.getInstance().getUser(username).deleteCommentFromUser(postId, commentId);
-		CommentDAO.getInstance().deleteCommentFromDB(commentId);
 	}
 	
 

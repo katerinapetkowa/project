@@ -44,9 +44,10 @@ public class UserDAO {
 				downvotedPosts.addAll(PostDAO.getInstance().getPostDownvotesByUser(username));
 				ConcurrentHashMap<Integer, Set<Integer>> comments = new ConcurrentHashMap<>();
 				comments.putAll(PostDAO.getInstance().getCommentsOfOtherPostsOfUser(username));
-				users.add(new User(resultSet.getString("username"),
-						resultSet.getString("name"), resultSet.getString("password"), resultSet.getString("email"),
-						resultSet.getString("profile_picture"), resultSet.getString("description"), posts, upvotedPosts, commentedPosts, comments, downvotedPosts));
+				users.add(new User(resultSet.getString("username"), resultSet.getString("name"),
+						resultSet.getString("password"), resultSet.getString("email"),
+						resultSet.getString("profile_picture"), resultSet.getString("description"), posts, upvotedPosts,
+						commentedPosts, comments, downvotedPosts));
 			}
 			resultSet.close();
 			st.close();
@@ -69,11 +70,11 @@ public class UserDAO {
 			st.setString(5, profilePicture);
 			st.setString(6, "My Funny Collection");
 			st.executeUpdate();
-//			ResultSet rs = st.getGeneratedKeys();
-//			if (rs.next()) {
-//				userId = rs.getInt(1);
-//			}
-//			rs.close();
+			// ResultSet rs = st.getGeneratedKeys();
+			// if (rs.next()) {
+			// userId = rs.getInt(1);
+			// }
+			// rs.close();
 			st.close();
 			System.out.println("User added successfully to db");
 		} catch (SQLException e) {
@@ -82,30 +83,30 @@ public class UserDAO {
 		}
 	}
 
-//	public void changeNameInDB(String username, String name) {
-//		try {
-//			PreparedStatement ps = DBManager.getInstance().getConnection()
-//					.prepareStatement("UPDATE users SET name = ? WHERE username = ?;");
-//			ps.setString(1, name);
-//			ps.setString(2, username);
-//			// Statement st =
-//			// DBManager.getInstance().getConnection().createStatement();
-//			// st.executeUpdate("UPDATE users SET name = '" + name + "' WHERE
-//			// username = '" + username + "';");
-//			// st.close();
-//			ps.executeUpdate();
-//			System.out.println("Name changed successfully in db");
-//		} catch (SQLException e) {
-//			System.out.println("Oops .. did not change the name of the user");
-//			e.printStackTrace();
-//		}
-//	}
+	// public void changeNameInDB(String username, String name) {
+	// try {
+	// PreparedStatement ps = DBManager.getInstance().getConnection()
+	// .prepareStatement("UPDATE users SET name = ? WHERE username = ?;");
+	// ps.setString(1, name);
+	// ps.setString(2, username);
+	// // Statement st =
+	// // DBManager.getInstance().getConnection().createStatement();
+	// // st.executeUpdate("UPDATE users SET name = '" + name + "' WHERE
+	// // username = '" + username + "';");
+	// // st.close();
+	// ps.executeUpdate();
+	// System.out.println("Name changed successfully in db");
+	// } catch (SQLException e) {
+	// System.out.println("Oops .. did not change the name of the user");
+	// e.printStackTrace();
+	// }
+	// }
 
 	public void changePasswordInDB(String username, String password) {
 		PreparedStatement changePassword = null;
 		try {
-			changePassword = DBManager.getInstance().getConnection().
-					prepareStatement("UPDATE users SET password = ? WHERE username = ?;");
+			changePassword = DBManager.getInstance().getConnection()
+					.prepareStatement("UPDATE users SET password = ? WHERE username = ?;");
 			changePassword.setString(1, password);
 			changePassword.setString(2, username);
 			changePassword.executeUpdate();
@@ -113,7 +114,7 @@ public class UserDAO {
 		} catch (SQLException e) {
 			System.out.println("Oops .. did not change the password of the user");
 			e.printStackTrace();
-		}finally {
+		} finally {
 			try {
 				if (changePassword != null) {
 					changePassword.close();
@@ -124,30 +125,31 @@ public class UserDAO {
 		}
 	}
 
-//	public void changeEmailInDB(String username, String email) {
-//		try {
-//			Statement st = DBManager.getInstance().getConnection().createStatement();
-//			st.executeUpdate("UPDATE users SET email = '" + email + "' WHERE username = '" + username + "';");
-//			st.close();
-//			System.out.println("Email changed succesfully in db");
-//		} catch (SQLException e) {
-//			System.out.println("Oops .. did not change the email of the user");
-//			e.printStackTrace();
-//		}
-//	}
+	// public void changeEmailInDB(String username, String email) {
+	// try {
+	// Statement st = DBManager.getInstance().getConnection().createStatement();
+	// st.executeUpdate("UPDATE users SET email = '" + email + "' WHERE username
+	// = '" + username + "';");
+	// st.close();
+	// System.out.println("Email changed succesfully in db");
+	// } catch (SQLException e) {
+	// System.out.println("Oops .. did not change the email of the user");
+	// e.printStackTrace();
+	// }
+	// }
 
 	public void changeProfilePictureInDB(String username, String profilePicture) {
 		PreparedStatement changeProfilePicture = null;
 		try {
-			changeProfilePicture = DBManager.getInstance().getConnection().
-					prepareStatement("UPDATE users SET profile_picture = ? WHERE username = ?;");
+			changeProfilePicture = DBManager.getInstance().getConnection()
+					.prepareStatement("UPDATE users SET profile_picture = ? WHERE username = ?;");
 			changeProfilePicture.setString(1, profilePicture);
 			changeProfilePicture.setString(2, username);
 			System.out.println("Profile picture changed succesfully in db");
 		} catch (SQLException e) {
 			System.out.println("Oops .. did not change the profile picture of the user");
 			e.printStackTrace();
-		}finally {
+		} finally {
 			try {
 				if (changeProfilePicture != null) {
 					changeProfilePicture.close();
@@ -157,12 +159,12 @@ public class UserDAO {
 			}
 		}
 	}
-	
-	public void changeProfileInDB(String username, String name, String email, String description){
+
+	public void changeProfileInDB(String username, String name, String email, String description) {
 		PreparedStatement changeProfile = null;
 		try {
-			changeProfile = DBManager.getInstance().getConnection().
-					prepareStatement("UPDATE users SET name = ?, email = ?, description = ? WHERE username = ?;");
+			changeProfile = DBManager.getInstance().getConnection()
+					.prepareStatement("UPDATE users SET name = ?, email = ?, description = ? WHERE username = ?;");
 			changeProfile.setString(1, name);
 			changeProfile.setString(2, email);
 			changeProfile.setString(3, description);
@@ -172,7 +174,7 @@ public class UserDAO {
 		} catch (SQLException e) {
 			System.out.println("Oops .. did not change profile");
 			e.printStackTrace();
-		}finally {
+		} finally {
 			try {
 				if (changeProfile != null) {
 					changeProfile.close();
@@ -192,8 +194,8 @@ public class UserDAO {
 		PreparedStatement deleteUser = null;
 		try {
 			DBManager.getInstance().getConnection().setAutoCommit(false);
-			deleteUpvotesOfUser = DBManager.getInstance().getConnection().
-					prepareStatement("DELETE FROM post_upvotes WHERE username = ? ;");
+			deleteUpvotesOfUser = DBManager.getInstance().getConnection()
+					.prepareStatement("DELETE FROM post_upvotes WHERE username = ? ;");
 			deleteUpvotesOfUser.setString(1, username);
 			deleteUpvotesOfUser.executeUpdate();
 			deleteDownvotesOfUser = DBManager.getInstance().getConnection()
@@ -204,11 +206,13 @@ public class UserDAO {
 					.prepareStatement("DELETE FROM comments  WHERE username = ? ;");
 			deleteCommentsOfUser.setString(1, username);
 			deleteCommentsOfUser.executeUpdate();
-			for (int i : UsersManager.getInstance().getUser(username).getPosts().keySet()) {
-				deleteCommentsOfPost = DBManager.getInstance().getConnection()
-						.prepareStatement("DELETE FROM comments  WHERE post_id = ? ;");
-				deleteCommentsOfPost.setInt(1, i);
-				deleteCommentsOfPost.executeUpdate();
+			if (!UsersManager.getInstance().getUser(username).getPosts().isEmpty()) {
+				for (int i : UsersManager.getInstance().getUser(username).getPosts().keySet()) {
+					deleteCommentsOfPost = DBManager.getInstance().getConnection()
+							.prepareStatement("DELETE FROM comments  WHERE post_id = ? ;");
+					deleteCommentsOfPost.setInt(1, i);
+					deleteCommentsOfPost.executeUpdate();
+				}
 			}
 			deletePosts = DBManager.getInstance().getConnection()
 					.prepareStatement("DELETE FROM posts  WHERE username = ? ;");

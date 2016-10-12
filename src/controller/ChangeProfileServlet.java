@@ -18,22 +18,21 @@ import model.UsersManager;
 
 @WebServlet("/ChangeProfileServlet")
 @MultipartConfig
-public class ChangeProfileServlet extends HttpServlet{
+public class ChangeProfileServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String logged = (String) request.getSession().getAttribute("loggedAs");
-		//String username = request.getParameter("username");
 		String name = request.getParameter("name");
 		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-		String password2 = request.getParameter("password2");
-		Part profilePicture = request.getPart("profilePicture");// handles data
-																// from <input
+		String description = request.getParameter("description");
+		Part profilePicture = request.getPart("profilePicture");// handles
+																// data
+																// from
+																// <input
 																// type=file
 																// name=profilePic>
 		InputStream profilePicStream = profilePicture.getInputStream();
-
 		// TODO validate data and modify valid property accordingly
 		boolean valid = true;
 		if (valid) {
@@ -43,21 +42,20 @@ public class ChangeProfileServlet extends HttpServlet{
 			}
 			File profilePicFile = new File(dir,
 					logged + "-profile-pic." + profilePicture.getContentType().split("/")[1]);
-			if(profilePicFile.exists()){
+			if (profilePicFile.exists()) {
 				profilePicFile.delete();
 			}
 			profilePicFile = new File(dir, logged + "-profile-pic." + profilePicture.getContentType().split("/")[1]);
 			System.out.println("Try to save file with name: " + profilePicFile.getName());
 			System.out.println("abs. path = " + profilePicFile.getAbsolutePath());
 			Files.copy(profilePicStream, profilePicFile.toPath());
-			UsersManager.getInstance().changeName(logged, name);
-			UsersManager.getInstance().changePassword(logged, password2);
-			UsersManager.getInstance().changeEmail(logged, email);
 			UsersManager.getInstance().changeProfilePicture(logged, profilePicFile.getName());
-			response.setHeader("Pragma", "No-cache"); 
-			response.setDateHeader("Expires", 0); 
-			response.setHeader("Cache-Control", "no-cache"); 
-			RequestDispatcher view = request.getRequestDispatcher("index.html");
+			
+			UsersManager.getInstance().changeProfile(logged, name, email, description);
+			response.setHeader("Pragma", "No-cache");
+			response.setDateHeader("Expires", 0);
+			response.setHeader("Cache-Control", "no-cache");
+			RequestDispatcher view = request.getRequestDispatcher("Profile.jsp");
 			view.forward(request, response);
 		}
 	}

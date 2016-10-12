@@ -117,14 +117,15 @@ public class UsersManager {
 	}
 
 	public void deleteUser(String username) {
+		UserDAO.getInstance().deleteUserFromDB(username); //removing user from db
 		User user = UsersManager.getInstance().getUser(username);
+		for(int postId : user.getPosts().keySet()){  //removing user's posts from collections, removing posts' comments and votes
+			PostsManager.getInstance().removePostFromCollections(postId);
+		}
 		for(int postId : user.getComments().keySet()){  //deleting user's comments from other user's posts
 			for(int commentId : user.getComments().get(postId)){
 				CommentsManager.getInstance().removeCommentFromAllComments(postId, commentId);
 			}
-		}
-		for(int postId : user.getPosts().keySet()){  //removing user's posts from collections, removing posts' comments and votes
-			PostsManager.getInstance().removePostFromCollections(postId);
 		}
 		for(int postId : user.getUpvotedPosts().keySet()){ //removing upvotes from collection of upvotes
 			PostsManager.getInstance().removeUpvoteFromCollection(postId, username);
@@ -133,7 +134,6 @@ public class UsersManager {
 			PostsManager.getInstance().removeDownvoteFromCollection(postId, username);
 		}
 		UsersManager.getInstance().registerredUsers.remove(username); //removing user from collection of users
-		UserDAO.getInstance().deleteUserFromDB(username); //removing user from db
 	}
 
 }

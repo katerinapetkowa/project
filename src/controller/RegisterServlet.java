@@ -52,6 +52,9 @@ public class RegisterServlet extends HttpServlet {
 							dir.mkdir();
 						}
 							File profilePicFile = new File(dir, username+"-profile-pic."+ profilePicture.getContentType().split("/")[1]);
+							if (profilePicFile.exists()) {
+								profilePicFile.delete();
+							}
 							System.out.println("Try to save file with name: " + profilePicFile.getName());
 							System.out.println("abs. path = " + profilePicFile.getAbsolutePath());
 							Files.copy(profilePicStream, profilePicFile.toPath());

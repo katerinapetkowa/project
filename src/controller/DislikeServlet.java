@@ -21,7 +21,27 @@ public class DislikeServlet extends HttpServlet {
 		request.setAttribute("post_id", postId);
 		String logged =(String) request.getSession().getAttribute("loggedAs");
 		Post post = PostsManager.getInstance().getPost(postId);
-		PostsManager.getInstance().downVotePost(logged,postId);
+		if(!PostsManager.getInstance().getPostDownvotes().containsKey(postId)){
+			if(!PostsManager.getInstance().getPostUpvotes().containsKey(postId)){
+				PostsManager.getInstance().downVotePost(logged,postId);
+			} 
+			else if(PostsManager.getInstance().getPostUpvotes().get(postId).contains(logged)){
+				PostsManager.getInstance().upvoteToDownvote(logged, postId);
+			}
+			else{
+				PostsManager.getInstance().downVotePost(logged,postId);
+			}
+		}
+		else if(PostsManager.getInstance().getPostDownvotes().get(postId).contains(logged)){
+			PostsManager.getInstance().reverseDownvote(logged, postId);
+		}
+		else if(PostsManager.getInstance().getPostUpvotes().get(postId).contains(logged)){
+			PostsManager.getInstance().upvoteToDownvote(logged, postId);
+		}
+		else{
+			PostsManager.getInstance().downVotePost(logged,postId);
+		}
+		//PostsManager.getInstance().downVotePost(logged,postId);
 		RequestDispatcher view = request.getRequestDispatcher("DetailsPostServlet?post_id="+postId);
 		view.forward(request, response);
 	}

@@ -30,8 +30,7 @@
 	<div class="form">
 
 		<div class="tab-content">
-			<form class="signup" action="ChangeProfileServlet" method="post"
-				enctype="multipart/form-data">
+			<form class="signup" action="ChangePasswordServlet" method="post">
 
 				<h1>Change password</h1>
 

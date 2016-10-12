@@ -98,6 +98,14 @@ public class PostsManager {
 	public Map<String, HashMap<Integer, Post>> getPostsByCategories() {
 		return Collections.unmodifiableMap(postsByCategories);
 	}
+	
+	public Map<Integer, HashSet<String>> getPostUpvotes() {
+		return Collections.unmodifiableMap(postUpvotes);
+	}
+	
+	public Map<Integer, HashSet<String>> getPostDownvotes() {
+		return Collections.unmodifiableMap(postDownvotes);
+	}
 
 	public void uploadPost(String username, String category, String title, LocalDateTime uploadDate, String picture) {
 		int postId = PostDAO.getInstance().addPostToDB(username, category, title, uploadDate, picture);
@@ -110,8 +118,6 @@ public class PostsManager {
 		PostsManager.getInstance().postsByCategories.get(category).put(post.getPostId(), post);
 		UsersManager.getInstance().getUser(username).addPost(post);
 	}
-	
-	
 
 	public void upVotePost(String username, int postId) {
 		if (!PostsManager.getInstance().postUpvotes.containsKey(postId)) {
@@ -163,9 +169,13 @@ public class PostsManager {
 
 	public void upvoteToDownvote(String username, int postId) {
 		PostsManager.getInstance().postUpvotes.get(postId).remove(username);
+		if(!PostsManager.getInstance().postDownvotes.containsKey(postId)){
+			PostsManager.getInstance().postDownvotes.put(postId, new HashSet<String>());
+		}
 		PostsManager.getInstance().postDownvotes.get(postId).add(username);
 		String category = PostsManager.getInstance().getPost(postId).getCategory();
 		for (int i = 0; i < 2; i++) {
+			PostsManager.getInstance().allPosts.get(postId).getDownVote();
 			PostsManager.getInstance().postsByCategories.get(category).get(postId).getDownVote();
 			UsersManager.getInstance().getUser(username).getDownVoteOfPost(postId);
 		}
@@ -177,9 +187,13 @@ public class PostsManager {
 
 	public void downvoteToUpvote(String username, int postId) {
 		PostsManager.getInstance().postDownvotes.get(postId).remove(username);
+		if(!PostsManager.getInstance().postUpvotes.containsKey(postId)){
+			PostsManager.getInstance().postUpvotes.put(postId, new HashSet<String>());
+		}
 		PostsManager.getInstance().postUpvotes.get(postId).add(username);
 		String category = PostsManager.getInstance().getPost(postId).getCategory();
 		for (int i = 0; i < 2; i++) {
+			PostsManager.getInstance().allPosts.get(postId).getUpVote();
 			PostsManager.getInstance().postsByCategories.get(category).get(postId).getUpVote();
 			UsersManager.getInstance().getUser(username).getUpVoteOfPost(postId);
 		}
@@ -200,6 +214,7 @@ public class PostsManager {
 	}
 
 	public void deletePost(int postId) {
+		PostDAO.getInstance().deletePostFromDB(postId);
 		for (Comment c : CommentsManager.getInstance().getCommentsOfPost(postId).values()) {
 			UsersManager.getInstance().getUser(c.getUsername()).deleteCommentFromUser(postId, c.getCommentId());
 			UsersManager.getInstance().getUser(c.getUsername()).removeCommentedPost(postId);
@@ -208,38 +223,41 @@ public class PostsManager {
 		PostsManager.getInstance().allPosts.remove(postId);
 		String postCategory = PostsManager.getInstance().getPost(postId).getCategory();
 		PostsManager.getInstance().postsByCategories.get(postCategory).remove(postId);
-		for(String username : PostsManager.getInstance().postUpvotes.get(postId)){
+		for (String username : PostsManager.getInstance().postUpvotes.get(postId)) {
 			UsersManager.getInstance().getUser(username).removeUpvoteOfPost(postId);
 		}
-		for(String username : PostsManager.getInstance().postDownvotes.get(postId)){
+		for (String username : PostsManager.getInstance().postDownvotes.get(postId)) {
 			UsersManager.getInstance().getUser(username).removeDownvoteOfPost(postId);
 		}
-		PostDAO.getInstance().deletePostFromDB(postId);
 	}
-	
-	public void removePostFromCollections(int postId){
+
+	public void removePostFromCollections(int postId) {
 		for (Comment c : CommentsManager.getInstance().getCommentsOfPost(postId).values()) {
 			UsersManager.getInstance().getUser(c.getUsername()).deleteCommentFromUser(postId, c.getCommentId());
 			UsersManager.getInstance().getUser(c.getUsername()).removeCommentedPost(postId);
 		}
 		CommentsManager.getInstance().deleteAllCommentsOfPost(postId);
+		String postCategory = PostsManager.getInstance().getPost(postId).getCategory();
 		PostsManager.getInstance().allPosts.remove(postId);
-		String postCategory = PostsManager.getInstance().getPost(postId).getCategory(); 
 		PostsManager.getInstance().postsByCategories.get(postCategory).remove(postId);
-		for(String username : PostsManager.getInstance().postUpvotes.get(postId)){
-			UsersManager.getInstance().getUser(username).removeUpvoteOfPost(postId);
+		if (PostsManager.getInstance().postUpvotes.containsKey(postId)) {
+			for (String username : PostsManager.getInstance().postUpvotes.get(postId)) {
+				UsersManager.getInstance().getUser(username).removeUpvoteOfPost(postId);
+			}
 		}
-		for(String username : PostsManager.getInstance().postDownvotes.get(postId)){
-			UsersManager.getInstance().getUser(username).removeDownvoteOfPost(postId);
+		if (PostsManager.getInstance().postDownvotes.containsKey(postId)) {
+			for (String username : PostsManager.getInstance().postDownvotes.get(postId)) {
+				UsersManager.getInstance().getUser(username).removeDownvoteOfPost(postId);
+			}
 		}
 	}
-	
-	public void removeUpvoteFromCollection(int postId, String username){
+
+	public void removeUpvoteFromCollection(int postId, String username) {
 		PostsManager.getInstance().postUpvotes.get(postId).remove(username);
 	}
 
-	public void removeDownvoteFromCollection(int postId, String username){
+	public void removeDownvoteFromCollection(int postId, String username) {
 		PostsManager.getInstance().postDownvotes.get(postId).remove(username);
 	}
-	
+
 }
