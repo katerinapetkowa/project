@@ -123,30 +123,28 @@ public class PostsManager {
 				.addPost(new Post(postId, username, category, title, 0, uploadDate, picture));
 	}
 
-	public boolean validUpvote(int postId, String username){
-		if(PostsManager.getInstance().getPostUpvotes().containsKey(postId)){
-			if(PostsManager.getInstance().getPostUpvotes().get(postId).contains(username)){
+	public boolean validUpvote(int postId, String username) {
+		if (PostsManager.getInstance().getPostUpvotes().containsKey(postId)) {
+			if (PostsManager.getInstance().getPostUpvotes().get(postId).contains(username)) {
 				return true;
-			}
-			else{
+			} else {
 				return false;
 			}
 		}
 		return false;
 	}
-	
-	public boolean validDownvote(int postId, String username){
-		if(PostsManager.getInstance().getPostDownvotes().containsKey(postId)){
-			if(PostsManager.getInstance().getPostDownvotes().get(postId).contains(username)){
+
+	public boolean validDownvote(int postId, String username) {
+		if (PostsManager.getInstance().getPostDownvotes().containsKey(postId)) {
+			if (PostsManager.getInstance().getPostDownvotes().get(postId).contains(username)) {
 				return true;
-			}
-			else{
+			} else {
 				return false;
 			}
 		}
 		return false;
 	}
-	
+
 	public void upVotePost(String username, int postId) {
 		if (!PostsManager.getInstance().postUpvotes.containsKey(postId)) {
 			PostsManager.getInstance().postUpvotes.put(postId, new HashSet<String>());
@@ -273,14 +271,18 @@ public class PostsManager {
 			UsersManager.getInstance().getUser(c.getUsername()).removeCommentedPost(postId);
 		}
 		CommentsManager.getInstance().deleteAllCommentsOfPost(postId);
-		PostsManager.getInstance().allPosts.remove(postId);
 		String postCategory = PostsManager.getInstance().getPost(postId).getCategory();
+		PostsManager.getInstance().allPosts.remove(postId);
 		PostsManager.getInstance().postsByCategories.get(postCategory).remove(postId);
-		for (String username : PostsManager.getInstance().postUpvotes.get(postId)) {
-			UsersManager.getInstance().getUser(username).removeUpvoteOfPost(postId);
+		if (PostsManager.getInstance().postUpvotes.containsKey(postId)) {
+			for (String username : PostsManager.getInstance().postUpvotes.get(postId)) {
+				UsersManager.getInstance().getUser(username).removeUpvoteOfPost(postId);
+			}
 		}
-		for (String username : PostsManager.getInstance().postDownvotes.get(postId)) {
-			UsersManager.getInstance().getUser(username).removeDownvoteOfPost(postId);
+		if (PostsManager.getInstance().postDownvotes.containsKey(postId)) {
+			for (String username : PostsManager.getInstance().postDownvotes.get(postId)) {
+				UsersManager.getInstance().getUser(username).removeDownvoteOfPost(postId);
+			}
 		}
 	}
 
