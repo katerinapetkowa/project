@@ -89,11 +89,13 @@
                         <a href="/MyGag/UploadPost.html"> Upload </a>
                     </li>
                      
-                    <li>    <div class="dropdown">
- 							 <button class="dropbtn">Settings</button>
+                     <li> <div class="dropdown">
+ 							 <img class="dropbtn" 
+					src="PictureServlet?username=${UsersManager.getInstance().getUser(sessionScope.loggedAs).getUsername()}" alt="" height="55" width="55"> 
   									<div class="dropdown-content">
 	    								<a href="/MyGag/Profile.jsp">My Profile</a>
-	   									<form action = "LogOutServlet" method = "post">
+	    								<a href="/MyGag/ChangeSettings.jsp">Settings</a>
+	    								<form action = "LogOutServlet" method = "post">
 	    								
 	   									<button class="dropbtnlog" type = "submit" >Logout</button>
 	   								<% 
@@ -106,7 +108,7 @@
 	   									
 	   								
 	   									</form>
-	    								
+	    						
   									</div>
 						</div> </li>
 					<li>

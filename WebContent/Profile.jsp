@@ -1,4 +1,5 @@
 <%@page import="model.UsersManager"%>
+<%@page import="model.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -71,7 +72,7 @@
 		<div class="collapse navbar-collapse"
 			id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li>
+					<li>
                         <a href="Hot.jsp">Hot</a>
                     </li>
                     
@@ -84,13 +85,15 @@
 				<li><a href="Food.jsp">Food</a></li>
 				<li><a href="/MyGag/UploadPost.html"> Upload </a></li>
 
-				<li><div class="dropdown">
-					<button class="dropbtn">Settings</button>
-					<div class="dropdown-content">
-						<a href="/MyGag/ChangeSettings.jsp">My Profile</a>
-						<form action = "LogOutServlet" method = "post">
+				 <li> <div class="dropdown">
+ 							 <img class="dropbtn" 
+					src="PictureServlet?username=${UsersManager.getInstance().getUser(sessionScope.loggedAs).getUsername()}" alt="" height="55" width="55"> 
+  									<div class="dropdown-content">
+	    								<a href="/MyGag/Profile.jsp">My Profile</a>
+	    								<a href="/MyGag/ChangeSettings.jsp">Settings</a>
+	    								<form action = "LogOutServlet" method = "post">
 	    								
-	   						<button class="dropbtnlog" type = "submit" >Logout</button>
+	   									<button class="dropbtnlog" type = "submit" >Logout</button>
 	   								<% 
 	    								
 	    								response.setHeader("Pragma", "No-cache"); 
@@ -100,9 +103,10 @@
 	    							%>
 	   									
 	   								
-	   				</form>
-					</div>
-				</div></li>
+	   									</form>
+	    						
+  									</div>
+						</div> </li>
 			       <li>
 					<form action = "SearchServlet" method = "get">
 					<input class = " input[type=text] " style = "color: #b4b4b4"  type="text" name="title" placeholder="Search..">
@@ -114,27 +118,38 @@
 		</div>
 		<!-- /.navbar-collapse -->
 	</div>
-	<!-- /.container --> </nav>
+	</nav>
+	<!-- /.container --> 
 
 	<!-- Page Content -->
-	<div class="container">
+<!-- 	<div class="container" > -->
 
-		<div class="row">
+<!-- 		<div class="row" > -->
 
 			<!-- Blog Entries Column -->
-			<div class="col-md-8">
+			
+<div  style="background-color:#222222">
 
 				
-				<h1 class="page-header">My profile</h1>
-				<p>
+<!-- 				<h1> class="page-header" My profile</h1> -->
+			
+			<br>	
 				
-				<h4>${UsersManager.getInstance().getUser(sessionScope.loggedAs).getUsername()}</h4>
-				<img class="img-responsive"
-					src="PictureServlet?username=${UsersManager.getInstance().getUser(sessionScope.loggedAs).getUsername()}" alt="" width="100">
-				<button class="dropbtnlog" type = "submit" onclick="window.location.href='/MyGag/ChangeSettings.jsp'">Change profile</button> </p>
-				<a style = "text-decoration: none"href = "deletePage.jsp"> Delete account</a>
+				
+				<center><img class="img-responsive"
+					src="PictureServlet?username=${UsersManager.getInstance().getUser(sessionScope.loggedAs).getUsername()}" alt=""  width="100"></center>
+				<center><h3 style = "color: #b4b4b4">${UsersManager.getInstance().getUser(sessionScope.loggedAs).getName()}</h3></center>
+				<center><h4 style = "color: #b4b4b4">${UsersManager.getInstance().getUser(sessionScope.loggedAs).getDescription()}</h4></center>
+<!-- 				<a style = "text-decoration: none"href = "deletePage.jsp"> Delete account</a> -->
 				<hr>
-				
+		</div>	
+			
+<!-- 			</div> -->
+<!-- 			</div> -->
+			
+			<div class="container">
+			<div class="row">
+			<div class="col-md-8">
 			
 				<c:forEach var='post' items='${UsersManager.getInstance().getUser(sessionScope.loggedAs).getFreshPosts().values()}'>
 				

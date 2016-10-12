@@ -81,7 +81,7 @@
                 
                 <form action = "DeleteServlet" method = "post">
                 <input id="username" name="username" type="hidden" value="<c:out value="${sessionScope.loggedAs}"></c:out>" size="30" required>
-                <button style = "background:none!important; border:none; padding:0!important;font: inherit;border-bottom:none;cursor: pointer" onmouseover="this.style.color = '#23527c'" onmouseout="this.style.color = '#222222'"> I want to delete my account.</button>
+                <button style = "background:none!important; border:none; padding:0!important;font: inherit;border-bottom:none;cursor: pointer" onmouseover="this.style.color = '#808080'" onmouseout="this.style.color = '#222222'"> I want to delete my account.</button>
                 </form>
                 </div>
              </div>
