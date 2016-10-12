@@ -186,14 +186,39 @@ public class UserDAO {
 	}
 
 	public void deleteUserFromDB(String username) {
+		PreparedStatement selectUpvotedPosts = null;
+		PreparedStatement changePointsOfPosts = null;
+		PreparedStatement selectDownvotedPosts = null;
 		PreparedStatement deleteUpvotesOfUser = null;
 		PreparedStatement deleteDownvotesOfUser = null;
+		PreparedStatement deleteUpvotesOfPosts = null;
+		PreparedStatement deleteDownvotesOfPosts = null;
 		PreparedStatement deleteCommentsOfUser = null;
 		PreparedStatement deleteCommentsOfPost = null;
 		PreparedStatement deletePosts = null;
 		PreparedStatement deleteUser = null;
 		try {
 			DBManager.getInstance().getConnection().setAutoCommit(false);
+			selectUpvotedPosts = DBManager.getInstance().getConnection()
+					.prepareStatement("SELECT P.post_id, P.points FROM posts P JOIN post_upvotes U ON P.post_id = U.post_id WHERE U.username =?;");
+			selectUpvotedPosts.setString(1, username);
+			ResultSet rs = selectUpvotedPosts.executeQuery();
+			changePointsOfPosts = DBManager.getInstance().getConnection()
+					.prepareStatement("UPDATE posts SET points = ? WHERE post_id = ?;");
+			while(rs.next()){
+				changePointsOfPosts.setInt(1, rs.getInt("points") - 1);
+				changePointsOfPosts.setInt(2, rs.getInt("post_id"));
+				changePointsOfPosts.executeUpdate();
+			}
+			selectDownvotedPosts = DBManager.getInstance().getConnection()
+					.prepareStatement("SELECT P.post_id, P.points FROM posts P JOIN post_downvotes D ON P.post_id = D.post_id WHERE D.username =?;");
+			selectDownvotedPosts.setString(1, username);
+			ResultSet rs1 = selectDownvotedPosts.executeQuery();
+			while(rs1.next()){
+				changePointsOfPosts.setInt(1, rs1.getInt("points") + 1);
+				changePointsOfPosts.setInt(2, rs1.getInt("post_id"));
+				changePointsOfPosts.executeUpdate();
+			}
 			deleteUpvotesOfUser = DBManager.getInstance().getConnection()
 					.prepareStatement("DELETE FROM post_upvotes WHERE username = ? ;");
 			deleteUpvotesOfUser.setString(1, username);
@@ -208,6 +233,14 @@ public class UserDAO {
 			deleteCommentsOfUser.executeUpdate();
 			if (!UsersManager.getInstance().getUser(username).getPosts().isEmpty()) {
 				for (int i : UsersManager.getInstance().getUser(username).getPosts().keySet()) {
+					deleteUpvotesOfPosts = DBManager.getInstance().getConnection()
+							.prepareStatement("DELETE FROM post_upvotes WHERE post_id = ?;");
+					deleteUpvotesOfPosts.setInt(1, i);
+					deleteUpvotesOfPosts.executeUpdate();
+					deleteDownvotesOfPosts = DBManager.getInstance().getConnection()
+							.prepareStatement("DELETE FROM post_downvotes WHERE post_id = ?;");
+					deleteDownvotesOfPosts.setInt(1, i);
+					deleteDownvotesOfPosts.executeUpdate();
 					deleteCommentsOfPost = DBManager.getInstance().getConnection()
 							.prepareStatement("DELETE FROM comments  WHERE post_id = ? ;");
 					deleteCommentsOfPost.setInt(1, i);

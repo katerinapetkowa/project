@@ -20,14 +20,13 @@ public class User {
 
 	private ConcurrentHashMap<Integer, Post> posts; // post id -> post
 
-	private ConcurrentHashMap<Integer,Post> upvotedPosts;
-	private ConcurrentHashMap<Integer,Post> commentedPosts;
+	private ConcurrentHashMap<Integer, Post> upvotedPosts;
+	private ConcurrentHashMap<Integer, Post> commentedPosts;
 	private ConcurrentHashMap<Integer, Set<Integer>> comments;
 	private ConcurrentSkipListSet<Integer> downvotes;
-	
 
 	public User(String username, String name, String password, String email, String profilePicture, String description,
-			ConcurrentHashMap<Integer, Post> posts, ConcurrentHashMap<Integer, Post> upvotedPosts, 
+			ConcurrentHashMap<Integer, Post> posts, ConcurrentHashMap<Integer, Post> upvotedPosts,
 			ConcurrentHashMap<Integer, Post> commentedPosts, ConcurrentHashMap<Integer, Set<Integer>> comments,
 			ConcurrentSkipListSet<Integer> downvotes) {
 		this.username = username;
@@ -87,7 +86,7 @@ public class User {
 	public String getProfilePicture() {
 		return profilePicture;
 	}
-	
+
 	public String getDescription() {
 		return description;
 	}
@@ -107,7 +106,7 @@ public class User {
 	public void setProfilePicture(String profilePicture) {
 		this.profilePicture = profilePicture;
 	}
-	
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
@@ -119,23 +118,23 @@ public class User {
 	public Map<Integer, Set<Integer>> getComments() {
 		return Collections.unmodifiableMap(comments);
 	}
-	
+
 	public Map<Integer, Post> getUpvotedPosts() {
 		return Collections.unmodifiableMap(upvotedPosts);
 	}
-	
+
 	public Map<Integer, Post> getCommentedPosts() {
 		return Collections.unmodifiableMap(commentedPosts);
 	}
-	
+
 	public Set<Integer> getDownvotes() {
 		return Collections.unmodifiableSet(downvotes);
 	}
 
 	public void addCommentToUser(int postId, int commentId, Post post) {
 		this.commentedPosts.put(postId, post);
-		if(!post.getUsername().equals(this.getUsername())){
-			if(!this.comments.containsKey(postId)){
+		if (!post.getUsername().equals(this.getUsername())) {
+			if (!this.comments.containsKey(postId)) {
 				this.comments.put(postId, new TreeSet<Integer>());
 			}
 			this.comments.get(postId).add(commentId);
@@ -143,7 +142,9 @@ public class User {
 	}
 
 	public void deleteCommentFromUser(int postId, int commentId) {
-		this.comments.get(postId).remove(commentId);
+		if (this.comments.containsKey(postId)) {
+			this.comments.get(postId).remove(commentId);
+		}
 	}
 
 	public void getUpVoteOfPost(int postId) {
@@ -157,24 +158,24 @@ public class User {
 			this.posts.get(postId).getDownVote();
 		}
 	}
-	
-	public void upvotePost(int postId, Post post){
+
+	public void upvotePost(int postId, Post post) {
 		this.upvotedPosts.put(postId, post);
 	}
-	
-	public void removeUpvoteOfPost(int postId){
+
+	public void removeUpvoteOfPost(int postId) {
 		this.upvotedPosts.remove(postId);
 	}
-	
-	public void downvotePost(int postId){
+
+	public void downvotePost(int postId) {
 		this.downvotes.add(postId);
 	}
-	
-	public void removeDownvoteOfPost(int postId){
+
+	public void removeDownvoteOfPost(int postId) {
 		this.downvotes.remove(postId);
 	}
-	
-	public void removeCommentedPost(int postId){
+
+	public void removeCommentedPost(int postId) {
 		this.commentedPosts.remove(postId);
 	}
 

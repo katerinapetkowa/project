@@ -129,9 +129,11 @@ public class UsersManager {
 		}
 		for(int postId : user.getUpvotedPosts().keySet()){ //removing upvotes from collection of upvotes
 			PostsManager.getInstance().removeUpvoteFromCollection(postId, username);
+			PostsManager.getInstance().reverseUpvoteOfUser(postId, username);
 		}
 		for(int postId : user.getDownvotes()){ //removing downvotes from collection of downvotes
 			PostsManager.getInstance().removeDownvoteFromCollection(postId, username);
+			PostsManager.getInstance().reverseDownvoteOfUser(postId, username);
 		}
 		UsersManager.getInstance().registerredUsers.remove(username); //removing user from collection of users
 	}
