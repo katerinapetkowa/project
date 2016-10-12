@@ -117,8 +117,8 @@ public class PostsManager {
 		if (!PostsManager.getInstance().postsByCategories.containsKey(category)) {
 			PostsManager.getInstance().postsByCategories.put(category, new HashMap<Integer, Post>());
 		}
-		PostsManager.getInstance().postsByCategories.get(category).put(post.getPostId(), post);
-		UsersManager.getInstance().getUser(username).addPost(post);
+		PostsManager.getInstance().postsByCategories.get(category).put(post.getPostId(), new Post(postId, username, category, title, 0, uploadDate, picture));
+		UsersManager.getInstance().getUser(username).addPost(new Post(postId, username, category, title, 0, uploadDate, picture));
 	}
 
 	public void upVotePost(String username, int postId) {
@@ -126,12 +126,17 @@ public class PostsManager {
 			PostsManager.getInstance().postUpvotes.put(postId, new HashSet<String>());
 		}
 		PostsManager.getInstance().postUpvotes.get(postId).add(username);
+		System.out.println(PostsManager.getInstance().allPosts.get(postId).getPoints());
 		PostsManager.getInstance().allPosts.get(postId).getUpVote();
+		System.out.println(PostsManager.getInstance().allPosts.get(postId).getPoints());
 		String category = PostsManager.getInstance().getPost(postId).getCategory();
 		PostsManager.getInstance().postsByCategories.get(category).get(postId).getUpVote();
+		System.out.println(PostsManager.getInstance().allPosts.get(postId).getPoints());
 		UsersManager.getInstance().getUser(username).getUpVoteOfPost(postId);
+		System.out.println(PostsManager.getInstance().allPosts.get(postId).getPoints());
 		Post post = PostsManager.getInstance().getPost(postId);
 		UsersManager.getInstance().getUser(username).upvotePost(postId, post);
+		System.out.println(PostsManager.getInstance().allPosts.get(postId).getPoints());
 		PostDAO.getInstance().upvotePostInDB(username, postId);
 	}
 
@@ -140,7 +145,9 @@ public class PostsManager {
 			PostsManager.getInstance().postDownvotes.put(postId, new HashSet<String>());
 		}
 		PostsManager.getInstance().postDownvotes.get(postId).add(username);
+		System.out.println(PostsManager.getInstance().allPosts.get(postId).getPoints());
 		PostsManager.getInstance().allPosts.get(postId).getDownVote();
+		System.out.println(PostsManager.getInstance().allPosts.get(postId).getPoints());
 		String category = PostsManager.getInstance().getPost(postId).getCategory();
 		PostsManager.getInstance().postsByCategories.get(category).get(postId).getDownVote();
 		UsersManager.getInstance().getUser(username).getDownVoteOfPost(postId);
