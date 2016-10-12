@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+
 import model.UsersManager;
 
 @WebServlet("/ChangeProfileServlet")
@@ -32,6 +33,7 @@ public class ChangeProfileServlet extends HttpServlet {
 																// <input
 																// type=file
 																// name=profilePic>
+		if(!profilePicture.getContentType().split("/")[1].equals("octet-stream")){
 		InputStream profilePicStream = profilePicture.getInputStream();
 		// TODO validate data and modify valid property accordingly
 		boolean valid = true;
@@ -50,14 +52,15 @@ public class ChangeProfileServlet extends HttpServlet {
 			System.out.println("abs. path = " + profilePicFile.getAbsolutePath());
 			Files.copy(profilePicStream, profilePicFile.toPath());
 			UsersManager.getInstance().changeProfilePicture(logged, profilePicFile.getName());
-			
+		}
+		}
 			UsersManager.getInstance().changeProfile(logged, name, email, description);
 			response.setHeader("Pragma", "No-cache");
 			response.setDateHeader("Expires", 0);
 			response.setHeader("Cache-Control", "no-cache");
 			RequestDispatcher view = request.getRequestDispatcher("Profile.jsp");
 			view.forward(request, response);
-		}
+		
 	}
 
 }
