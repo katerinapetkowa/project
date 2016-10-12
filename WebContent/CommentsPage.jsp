@@ -225,6 +225,7 @@ function action2()
 				 </c:otherwise>
 				</c:choose>
 				</form></div>
+				
 				<div style="float: right; width: 5px">
 				<form action = "DislikeServlet" method = "post">
 				
@@ -242,6 +243,18 @@ function action2()
 				</c:choose>
 				
 				</form></div>
+				
+				<div style="float: right; width: 55px">
+				<form action="DeletePostServlet" method = "post">
+				
+				<input id="author" name="post_id" type="hidden" value="<c:out value= "${post.postId}"></c:out>" size="30" required>
+				<input id="username" name="username" type="hidden" value="<c:out value="${sessionScope.loggedAs}"></c:out>" size="30" required>
+				<button data-toggle="tooltip" data-placement="top" title="Delete post" style = "float: right;background:none!important; border:none; padding:0!important;font: inherit;border-bottom:none;cursor: pointer" onmouseover="this.style.color = '#808080'" onmouseout="this.style.color = '#222222'">delete</button>
+				</form>
+				
+				
+				</div>
+				
 				</div>
 				<br>
 				<br> 

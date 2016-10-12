@@ -18,6 +18,8 @@ public class ChangePasswordServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getSession().getAttribute("loggedAs").toString();
 		String password = request.getParameter("password");
+		
+	
 		String encryptedPassword = UsersManager.getInstance().passwordToMD5(password);
 		UsersManager.getInstance().changePassword(username, encryptedPassword);
 		
