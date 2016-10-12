@@ -473,7 +473,7 @@ public class PostDAO {
 			ResultSet rs = selectPoints.executeQuery();
 			if (rs.next()) {
 				points = rs.getInt(1);
-				System.out.println("Points before changing from upvot to downvote - " + points);
+				System.out.println("Points before changing from upvote to downvote - " + points);
 			}
 			changePoints = DBManager.getInstance().getConnection()
 					.prepareStatement("UPDATE posts SET points = ?  WHERE post_id = ? ;");
