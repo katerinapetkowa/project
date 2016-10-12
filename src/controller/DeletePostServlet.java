@@ -20,7 +20,7 @@ public class DeletePostServlet extends HttpServlet {
 		String username = request.getParameter("username");
 		int postId = Integer.parseInt(request.getParameter("post_id"));
 		PostsManager.getInstance().deletePost(postId);
-		RequestDispatcher view = request.getRequestDispatcher("CommentsPage.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("posts.jsp");
 		view.forward(request, response);
 	}
 

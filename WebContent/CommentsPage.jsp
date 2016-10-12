@@ -192,7 +192,7 @@ function action2()
 
            <!-- Blog Post Content Column -->
             <div class="col-lg-8">
-
+				
                 <!-- Blog Post -->
 
 	 		 <c:set var = "post" value="${PostsManager.getInstance().getPost(param.post_id)}" scope = "page"/>
@@ -244,18 +244,31 @@ function action2()
 				
 				</form></div>
 				
-				<div style="float: right; width: 55px">
-				<form action="DeletePostServlet" method = "post">
+				<div style="float: left; width: 55px">
+<%-- 				<c:choose> --%>
+<%--                      <c:when test="${sessionScope.loggedAs == post.username}"> --%>
+<!-- 				<form action="DeletePostServlet" method = "post"> -->
 				
+<%-- 				<input id="author" name="post_id" type="hidden" value="<c:out value= "${post.postId}"></c:out>" size="30" required> --%>
+<%-- 				<input id="username" name="username" type="hidden" value="<c:out value="${sessionScope.loggedAs}"></c:out>" size="30" required> --%>
+				
+<!-- 				</form> -->
+<%-- 				</c:when> --%>
+<%--                      </c:choose> --%>
+				
+				
+				</div>
+				
+				</div>
+				<c:choose>
+                     <c:when test="${sessionScope.loggedAs == post.username}">
+				<form action = "DeletePostServlet" method = "post">
+				<button data-toggle="tooltip" data-placement="top"  title="Delete post" style = "float: right;background:none!important; border:none; padding:0!important;font: inherit;border-bottom:none;cursor: pointer" onmouseover="this.style.color = '#808080'" onmouseout="this.style.color = '#222222'">delete</button>
 				<input id="author" name="post_id" type="hidden" value="<c:out value= "${post.postId}"></c:out>" size="30" required>
 				<input id="username" name="username" type="hidden" value="<c:out value="${sessionScope.loggedAs}"></c:out>" size="30" required>
-				<button data-toggle="tooltip" data-placement="top" title="Delete post" style = "float: right;background:none!important; border:none; padding:0!important;font: inherit;border-bottom:none;cursor: pointer" onmouseover="this.style.color = '#808080'" onmouseout="this.style.color = '#222222'">delete</button>
 				</form>
-				
-				
-				</div>
-				
-				</div>
+				</c:when>
+                     </c:choose>
 				<br>
 				<br> 
 				<a style = "color:gray" href = ""> <c:out value="${post.points}"></c:out> points </a>  - <a style = "color:gray" href = ""> <c:out value = "${CommentsManager.getInstance().getNumberOfCommentsOfPost(post.postId)}"></c:out> comments </a>
