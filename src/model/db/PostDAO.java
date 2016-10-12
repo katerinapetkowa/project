@@ -174,12 +174,18 @@ public class PostDAO {
 					"SELECT P.post_id, P.username, category_name, title, P.points, P.upload_date, P.post_picture FROM posts P JOIN categories C ON P.category_id = C.category_id JOIN comments com ON com.post_id = P.post_id WHERE com.username = ? ;");
 			st.setString(1, username);
 			ResultSet resultSet = st.executeQuery();
+			//System.out.println("commented posts of user from db");
 			while (resultSet.next()) {
 				commentedPosts.put(resultSet.getInt("post_id"),
 						new Post(resultSet.getInt("post_id"), resultSet.getString("username"),
 								resultSet.getString("category_name"), resultSet.getString("title"),
 								resultSet.getInt("points"), resultSet.getTimestamp("upload_date").toLocalDateTime(),
 								resultSet.getString("post_picture")));
+//				System.out.println(resultSet.getInt("post_id")+","+ resultSet.getString("username")+","+ 
+//								resultSet.getString("category_name")+","+  resultSet.getString("title")+","+ 
+//								resultSet.getInt("points")+","+  resultSet.getTimestamp("upload_date").toLocalDateTime()+","+ 
+//								resultSet.getString("post_picture"));
+				
 			}
 			resultSet.close();
 			st.close();

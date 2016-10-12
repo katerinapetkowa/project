@@ -38,9 +38,9 @@ public class User {
 		this.posts = new ConcurrentHashMap<>();
 		this.posts.putAll(posts);
 		this.upvotedPosts = new ConcurrentHashMap<>();
-		this.upvotedPosts.putAll(posts);
+		this.upvotedPosts.putAll(upvotedPosts);
 		this.commentedPosts = new ConcurrentHashMap<>();
-		this.commentedPosts.putAll(posts);
+		this.commentedPosts.putAll(commentedPosts);
 		this.comments = new ConcurrentHashMap<>();
 		this.comments.putAll(comments);
 		this.downvotes = new ConcurrentSkipListSet<>();
@@ -124,6 +124,10 @@ public class User {
 	}
 
 	public Map<Integer, Post> getCommentedPosts() {
+//		System.out.println("commented posts of user in collection");
+//		for(Post p : this.commentedPosts.values()){
+//			System.out.println(p.toString());
+//		}
 		return Collections.unmodifiableMap(commentedPosts);
 	}
 
