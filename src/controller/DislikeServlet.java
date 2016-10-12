@@ -29,14 +29,16 @@ public class DislikeServlet extends HttpServlet {
 			} else {
 				PostsManager.getInstance().downVotePost(logged, postId);
 			}
-		} else if (PostsManager.getInstance().getPostDownvotes().get(postId).contains(logged)) {
-			PostsManager.getInstance().reverseDownvote(logged, postId);
-		} else if (PostsManager.getInstance().getPostUpvotes().containsKey(postId)) {
-			if (PostsManager.getInstance().getPostUpvotes().get(postId).contains(logged)) {
-				PostsManager.getInstance().upvoteToDownvote(logged, postId);
+		} else {
+			if (PostsManager.getInstance().getPostDownvotes().get(postId).contains(logged)) {
+				PostsManager.getInstance().reverseDownvote(logged, postId);
+			} else if (PostsManager.getInstance().getPostUpvotes().containsKey(postId)) {
+				if (PostsManager.getInstance().getPostUpvotes().get(postId).contains(logged)) {
+					PostsManager.getInstance().upvoteToDownvote(logged, postId);
+				}
+			} else {
+				PostsManager.getInstance().downVotePost(logged, postId);
 			}
-		}else {
-			PostsManager.getInstance().downVotePost(logged, postId);
 		}
 		// PostsManager.getInstance().downVotePost(logged,postId);
 		RequestDispatcher view = request.getRequestDispatcher("DetailsPostServlet?post_id=" + postId);
