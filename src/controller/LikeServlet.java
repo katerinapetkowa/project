@@ -22,14 +22,12 @@ public class LikeServlet extends HttpServlet {
 		String logged = (String) request.getSession().getAttribute("loggedAs");
 		Post post = PostsManager.getInstance().getPost(postId);
 		if (!PostsManager.getInstance().getPostUpvotes().containsKey(postId)) {
-			if (!PostsManager.getInstance().getPostDownvotes().containsKey(postId)) {
-				PostsManager.getInstance().upVotePost(logged, postId);
-			} else {
+			if (PostsManager.getInstance().getPostDownvotes().containsKey(postId)) {
 				if (PostsManager.getInstance().getPostDownvotes().get(postId).contains(logged)) {
 					PostsManager.getInstance().downvoteToUpvote(logged, postId);
-				} else {
-					PostsManager.getInstance().upVotePost(logged, postId);
 				}
+			} else {
+				PostsManager.getInstance().upVotePost(logged, postId);
 			}
 		} else {
 			if (PostsManager.getInstance().getPostUpvotes().get(postId).contains(logged)) {
@@ -38,11 +36,14 @@ public class LikeServlet extends HttpServlet {
 				if (PostsManager.getInstance().getPostDownvotes().containsKey(postId)) {
 					if (PostsManager.getInstance().getPostDownvotes().get(postId).contains(logged)) {
 						PostsManager.getInstance().downvoteToUpvote(logged, postId);
+					} else {
+						PostsManager.getInstance().upVotePost(logged, postId);
 					}
 				} else {
 					PostsManager.getInstance().upVotePost(logged, postId);
-				}
+				} 
 			}
+
 		}
 		// PostsManager.getInstance().upVotePost(logged,postId);
 		RequestDispatcher view = request.getRequestDispatcher("DetailsPostServlet?post_id=" + postId);

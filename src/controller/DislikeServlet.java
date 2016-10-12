@@ -22,14 +22,12 @@ public class DislikeServlet extends HttpServlet {
 		String logged = (String) request.getSession().getAttribute("loggedAs");
 		Post post = PostsManager.getInstance().getPost(postId);
 		if (!PostsManager.getInstance().getPostDownvotes().containsKey(postId)) {
-			if (!PostsManager.getInstance().getPostUpvotes().containsKey(postId)) {
-				PostsManager.getInstance().downVotePost(logged, postId);
-			} else {
+			if (PostsManager.getInstance().getPostUpvotes().containsKey(postId)) {
 				if (PostsManager.getInstance().getPostUpvotes().get(postId).contains(logged)) {
 					PostsManager.getInstance().upvoteToDownvote(logged, postId);
-				} else {
-					PostsManager.getInstance().downVotePost(logged, postId);
 				}
+			} else {
+				PostsManager.getInstance().downVotePost(logged, postId);
 			}
 		} else {
 			if (PostsManager.getInstance().getPostDownvotes().get(postId).contains(logged)) {
@@ -41,11 +39,15 @@ public class DislikeServlet extends HttpServlet {
 					} else {
 						PostsManager.getInstance().downVotePost(logged, postId);
 					}
+				} else {
+					PostsManager.getInstance().downVotePost(logged, postId);
 				}
 			}
-			// PostsManager.getInstance().downVotePost(logged,postId);
-			RequestDispatcher view = request.getRequestDispatcher("DetailsPostServlet?post_id=" + postId);
-			view.forward(request, response);
+
 		}
+		// PostsManager.getInstance().downVotePost(logged,postId);
+		RequestDispatcher view = request.getRequestDispatcher("DetailsPostServlet?post_id=" + postId);
+		view.forward(request, response);
 	}
+
 }
