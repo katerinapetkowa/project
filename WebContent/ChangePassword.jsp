@@ -63,7 +63,7 @@
 
 	</div>
 	<!-- /form -->
-
+	<script src="js/index.js"></script>
 	<script>
 		function asd(){
 			var pass = $('#password').val();
