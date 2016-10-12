@@ -71,6 +71,13 @@
 		<div class="collapse navbar-collapse"
 			id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
+				<li>
+                        <a href="Hot.jsp">Hot</a>
+                    </li>
+                    
+                    <li>
+                        <a href="Fresh.jsp">Fresh</a>
+                    </li>
 				<li><a href="Funny.jsp">Funny</a></li>
 				<li><a href="MovieTV.jsp">MovieTV</a></li>
 				<li><a href="Sport.jsp">Sport</a></li>

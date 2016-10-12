@@ -37,12 +37,13 @@
 
 </head>
 
+
 <body>
 	<% if(session.getAttribute("loggedAs") == null){ 
 	
 		request.getRequestDispatcher("index.html").forward(request, response);
 	
-		}
+	}
 	%>
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -57,7 +58,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="posts.jsp"> <img alt="MyGag" src="9gag-logo.png" height="55" width="55"> </a>
+               <a href="posts.jsp"> <img alt="MyGag" src="9gag-logo.png" height="55" width="55"> </a>
                
                  
             </div>
@@ -72,8 +73,9 @@
                     <li>
                         <a href="Fresh.jsp">Fresh</a>
                     </li>
+                	
                     <li>
-                        <a href="Funny.jsp" style="color:white">Funny</a>
+                        <a href="Funny.jsp">Funny</a>
                     </li>
                     <li>
                         <a href="MovieTV.jsp">MovieTV</a>
@@ -88,11 +90,11 @@
                         <a href="/MyGag/UploadPost.html"> Upload </a>
                     </li>
                      
-                      <li>  <div class="dropdown">
+                       <li> <div class="dropdown">
  							 <button class="dropbtn">Settings</button>
   									<div class="dropdown-content">
 	    								<a href="/MyGag/Profile.jsp">My Profile</a>
-	   									<form action = "LogOutServlet" method = "post">
+	    								<form action = "LogOutServlet" method = "post">
 	    								
 	   									<button class="dropbtnlog" type = "submit" >Logout</button>
 	   								<% 
@@ -105,16 +107,21 @@
 	   									
 	   								
 	   									</form>
-	    								
+	    						
   									</div>
 						</div> </li>
+						
+						
+						
 					<li>
 					<form action = "SearchServlet" method = "get">
 					<input class = " input[type=text] " style = "color: #b4b4b4"  type="text" name="title" placeholder="Search..">
 					</form>
-					</li>
+					</li>	
+					
                     
                 </ul>
+               
                 
             </div>
             <!-- /.navbar-collapse -->
@@ -134,17 +141,20 @@
                     Welcome to our site MyGag!
                     
                 </h1>
-				<c:forEach var = "post" items='${PostsManager.getInstance().getFreshPostsByCategory("Funny").values()}'>
+                
+                <c:forEach var = "post" items='${PostsManager.getInstance().getHotPosts().values()}'>
+				
                 <!-- First Blog Post -->
                 <h2>
                     <a style = "text-decoration: none; color:#222222" onmouseover="this.style.color = '#23527c'" onmouseout="this.style.color = '#222222'" href="DetailsPostServlet?post_id=<c:out value="${post.postId}"></c:out>"> <c:out value="${post.title}"></c:out></a>
                 </h2>
                
-                <p><span class="glyphicon glyphicon-time"></span> <c:out value="${post.uploadDate}"></c:out></p>
+                <p><span class="glyphicon glyphicon-time"></span> <c:out value="${post.uploadDate}"></c:out> </p>
                 <hr>
-                <a href="DetailsPostServlet?post_id=<c:out value="${post.postId}"></c:out>"> <img class="img-responsive" src="PostServlet?post_id=<c:out value="${post.postId}"></c:out>" alt="" width = "500"></a>
+                <a href="DetailsPostServlet?post_id=<c:out value="${post.postId}"></c:out>"><img class="img-responsive" src="PostServlet?post_id=<c:out value="${post.postId}"></c:out>" alt="" width = "500"></a>
                 <hr>
                
+				
 				</c:forEach>
                </div>
 			 </div>
