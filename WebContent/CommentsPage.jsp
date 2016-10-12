@@ -153,8 +153,8 @@ function action2()
  							 <img class="dropbtn" 
 					src="PictureServlet?username=${UsersManager.getInstance().getUser(sessionScope.loggedAs).getUsername()}" alt="" height="55" width="55"> 
   									<div class="dropdown-content">
-	    								<a href="/MyGag/Profile.jsp">My Profile</a>
-	    								<a href="/MyGag/ChangeSettings.jsp">Settings</a>
+	    								<a style = "text-decoration: none" onmouseover="this.style.color = '#b4b4b4'" href="/MyGag/Profile.jsp">My Profile</a>
+	    								<a style = "text-decoration: none" onmouseover="this.style.color = '#b4b4b4'" href="/MyGag/ChangeSettings.jsp">Settings</a>
 	    								<form action = "LogOutServlet" method = "post">
 	    								
 	   									<button class="dropbtnlog" type = "submit" >Logout</button>
