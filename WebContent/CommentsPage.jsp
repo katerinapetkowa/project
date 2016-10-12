@@ -208,16 +208,18 @@ function action2()
 				<div style="float: left; width: 5px">
 				<form action = "LikeServlet" method = "post">
 <%-- 				<a href="LikeServlet?post_id=<c:out value="${post.postId}"></c:out>"> <input type = "image" id ="image" src="heart.png" onclick="action();" alt="Submit" width="38" height="38"></a>  --%>
-				<input type = "image" id ="image" src="heart.png" onclick="action();" alt="Submit" width="38" height="38">
+				
 				<input id="author" name="post_id" type="hidden" value="<c:out value= "${post.postId}"></c:out>" size="30" required>
 				<input id="username" name="username" type="hidden" value="<c:out value="${sessionScope.loggedAs}"></c:out>" size="30" required>
+				<input type = "image" id ="image" src="heart.png" onclick="action();" alt="Submit" width="38" height="38">
 				</form></div>
 				<div style="float: right; width: 5px">
 				<form action = "DislikeServlet" method = "post">
-				<input type = "image"  id = "image2" src="dislikebutton.png" onclick="action2();" alt="Submit" width="38" height="38">
+				
 				<input id="author" name="post_id" type="hidden" value="<c:out value= "${post.postId}"></c:out>" size="30" required>
 				<input id="username" name="username" type="hidden" value="<c:out value="${sessionScope.loggedAs}"></c:out>" size="30" required>
 <%-- 				<a href="DislikeServlet?post_id=<c:out value="${post.postId}"></c:out>"> <input type = "image"  id = "image2" src="dislikebutton.png" onclick="action2();" alt="Submit" width="38" height="38"></a> --%>
+				<input type = "image"  id = "image2" src="dislikebutton.png" onclick="action2();" alt="Submit" width="38" height="38">
 				</form></div>
 				</div>
 				<br>

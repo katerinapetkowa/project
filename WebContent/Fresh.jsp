@@ -72,7 +72,7 @@
                     </li>
                     
                     <li>
-                        <a href="Fresh.jsp">Fresh</a>
+                        <a href="Fresh.jsp" style="color:white">Fresh</a>
                     </li>
                 	
                     <li>

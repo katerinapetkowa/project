@@ -68,7 +68,7 @@
                 <ul class="nav navbar-nav">
                 
                 	<li>
-                        <a href="Hot.jsp">Hot</a>
+                        <a href="Hot.jsp" style="color:white">Hot</a>
                     </li>
                     
                     <li>

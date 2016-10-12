@@ -162,7 +162,7 @@
                         <a style="font-size:18px;color:#222222" href="UpvotesPage.jsp">Upvotes</a>
                     </li>
                     <li>
-                        <a style="font-size:18px;color:#222222" href="Comments.jsp">Comments</a>
+                        <a style="font-size:18px;color:#222222" href="">Comments</a>
                     </li>
               </ul>
               </div>
@@ -174,7 +174,7 @@
 			<div class="row">
 			<div class="col-md-8">
 			
-				<c:forEach var='post' items='${UsersManager.getInstance().getUser(sessionScope.loggedAs).getFreshPosts().values()}'>
+				<c:forEach var='post' items='${UsersManager.getInstance().getUser(sessionScope.loggedAs).getCommentedPosts().values()}'>
 				
 				
 				<!-- First Blog Post -->
@@ -208,5 +208,6 @@
 	<script src="js2/bootstrap.min.js"></script>
 
 </body>
+
 
 </html>
