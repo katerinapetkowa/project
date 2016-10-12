@@ -24,7 +24,6 @@
 
 <body>
 
-<script src="js3/index.js"></script>
 	<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 
 
@@ -55,7 +54,7 @@
 						maxlength="30" required autocomplete="off" />
 				</div>
 
-				<button class="button button-block" type="button" onclick="asdas()">Save
+				<button class="button button-block" type="button" onclick="asd()">Save
 					Changes</button>
 
 			</form>
@@ -66,27 +65,61 @@
 	</div>
 	<!-- /form -->
 
-
-
-	<script type="text/javascript">
-		function asdas() {
-			var params = {
-				oldPassword : $('#old_password').val(),
-				password : $('#password').val(),
-				confirmPassword : $('#confirm_password').val()
-			};
-			$.post("ValidatePasswordServlet", $.param(params), function(
-					responseText) {
-				console.log(responseText);
-				if (responseText[0] == "f") {
-					$('#old_password').get(0).setCustomValidity(
-							'Wrong password');
-					$('#old_password').get(0).reportValidity();
-				}else {
-					$('#submitForm').submit();
-				}
-			});
+	<script>
+		function asd(){
+			var pass = $('#password').val();
+			var newPass = $('#confirm_password').val();
+			if(pass == ""){
+				$('#password').get(0).setCustomValidity('Please enter a new password !');
+				$('#password').get(0).reportValidity();
+				return;
+			}
+			if(newPass == ""){
+				$('#confirm_password').get(0).setCustomValidity('Please confirm new password!');
+				$('#confirm_password').get(0).reportValidity();
+				return;
+			}
+			if(pass != newPass){
+				$('#confirm_password').get(0).setCustomValidity('Passwords Don\'t match!');
+				$('#confirm_password').get(0).reportValidity();
+			}else{
+				var params = {
+						oldPassword : $('#old_password').val(),
+						password : $('#password').val(),
+						confirmPassword : $('#confirm_password').val()
+					};
+					$.post("ValidatePasswordServlet", $.param(params), function(
+							responseText) {
+						console.log(responseText);
+						if (responseText[0] == "f") {
+							$('#old_password').get(0).setCustomValidity(
+									'Wrong password');
+							$('#old_password').get(0).reportValidity();
+						}else {
+							$('#submitForm').submit();
+						}
+					});
+			}
 		}
+	
+// 		function asdas() {
+// 			var params = {
+// 				oldPassword : $('#old_password').val(),
+// 				password : $('#password').val(),
+// 				confirmPassword : $('#confirm_password').val()
+// 			};
+// 			$.post("ValidatePasswordServlet", $.param(params), function(
+// 					responseText) {
+// 				console.log(responseText);
+// 				if (responseText[0] == "f") {
+// 					$('#old_password').get(0).setCustomValidity(
+// 							'Wrong password');
+// 					$('#old_password').get(0).reportValidity();
+// 				}else {
+// 					$('#submitForm').submit();
+// 				}
+// 			});
+// 		}
 	</script>
 
 </body>

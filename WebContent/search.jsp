@@ -141,6 +141,9 @@
                
                <c:set var="title" value="${param.title}" scope="request" />
                <h4>Search results for "<c:out value="${requestScope.title}"></c:out>"</h4>
+               <c:if test='${PostsManager.getInstance().searchPosts(requestScope.title).isEmpty()}'>
+               	<h4>No results</h4>
+               </c:if>
 				<c:forEach var = "post" items='${PostsManager.getInstance().searchPosts(requestScope.title).values()}'>
                 <!-- First Blog Post -->
               
