@@ -305,22 +305,34 @@
 			 </div>
          
 <script>
-var modal = document.getElementById('id01');
+/* var modal = document.getElementById('id01');
 
 modal.addEventListener('click', function(event){
 	
 	modal.style.display = 'none';
-});
+}); */
+
+// Get the modal
+ var modal = document.getElementById('id01');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+} 
 </script>
-<script>
+<script >
+//Get the modal
 var modal2 = document.getElementById('id02');
 
-modal2.addEventListener('click', function(event){
-	
-	modal2.style.display = 'none';
-});
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal2) {
+        modal2.style.display = "none";
+    }
+}
 </script>
-
 
   
 
