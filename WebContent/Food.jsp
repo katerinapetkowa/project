@@ -113,7 +113,7 @@
 						</div> </li>
 					<li>
 					<form action = "SearchServlet" method = "get">
-					<input class = " input[type=text] " style = "color: #b4b4b4"  type="text" name="title" placeholder="Search..">
+					<input class = " input[type=text] " style = "color: #b4b4b4"  type="text" name="title" required placeholder="Search..">
 					</form>
 					</li>
                     
@@ -133,10 +133,11 @@
             <!-- Blog Entries Column -->
             <div class="col-md-8">
 
-                <h1 class="page-header">
-                    Welcome to our site MyGag!
-                    
-                </h1>
+				  <c:if test='${PostsManager.getInstance().getFreshPostsByCategory("Food").isEmpty()}'>
+                <h2 class="page-header">
+                    No posts for this category
+                </h2>
+                </c:if>
 				<c:forEach var = "post" items='${PostsManager.getInstance().getFreshPostsByCategory("Food").values()}'>
                 <!-- First Blog Post -->
                 <h2>

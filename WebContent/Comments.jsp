@@ -173,7 +173,11 @@
 			<div class="container">
 			<div class="row">
 			<div class="col-md-8">
-			
+			 <c:if test='${UsersManager.getInstance().getUser(sessionScope.loggedAs).getCommentedPosts().isEmpty()}'>
+                <h3 class="page-header">
+                    No commented posts
+                </h3>
+                </c:if>
 				<c:forEach var='post' items='${UsersManager.getInstance().getUser(sessionScope.loggedAs).getCommentedPosts().values()}'>
 				
 				

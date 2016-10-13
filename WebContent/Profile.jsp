@@ -109,7 +109,7 @@
 						</div> </li>
 			       <li>
 					<form action = "SearchServlet" method = "get">
-					<input class = " input[type=text] " style = "color: #b4b4b4"  type="text" name="title" placeholder="Search..">
+					<input class = " input[type=text] " style = "color: #b4b4b4"  type="text" name="title" required placeholder="Search..">
 					</form>
 					</li>
 
@@ -173,6 +173,12 @@
 			<div class="container">
 			<div class="row">
 			<div class="col-md-8">
+			
+			 <c:if test='${UsersManager.getInstance().getUser(sessionScope.loggedAs).getFreshPosts().isEmpty()}'>
+                <h3 class="page-header">
+                    You have no posts
+                </h3>
+                </c:if>
 			
 				<c:forEach var='post' items='${UsersManager.getInstance().getUser(sessionScope.loggedAs).getFreshPosts().values()}'>
 				

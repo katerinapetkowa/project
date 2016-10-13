@@ -113,7 +113,7 @@
 						</div> </li>
 					<li>
 					<form action = "SearchServlet" method = "get">
-					<input class = " input[type=text] " style = "color: #b4b4b4"  type="text" name="title" placeholder="Search..">
+					<input class = " input[type=text] " style = "color: #b4b4b4"  type="text" name="title" required placeholder="Search..">
 					</form>
 					</li>	
 					
